@@ -1,0 +1,242 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
+\pagestyle{plain}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+% Use a single stroke for Chinese headings when pdfLaTeX has no bold CJK font.
+\newcommand{\headingweight}{\ifPDFTeX\mdseries\else\bfseries\fi}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\headingweight}}
+\makeatother
+
+\newcommand{\indep}{\mathrel{\perp\!\!\!\perp}}
+\newtheoremstyle{report}{7pt}{7pt}{\normalfont}{}{\headingweight}{。}{0.4em}{}
+\theoremstyle{report}
+\newtheorem{assumption}{假设}
+\newtheorem{theorem}{定理}
+\begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
+\begin{center}
+{\LARGE\headingweight 两个暴露下有序结局 Shapley 责任的识别}\\[5pt]
+{\large 技术报告}
+\end{center}
+
+设 $X_1,X_2\in\{0,1\}$，$Y\in\{0,1,2\}$，数值越大表示结局越严重。
+四个潜在结果组成类型 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$。
+按每升一级计 $1$ 分，定义病例事件
+\[
+\mathcal E_1=\{X_1=X_2=1,Y=1\},\qquad
+\mathcal E_2=\{X_1=X_2=1,Y=2\}.
+\]
+对满足 $t_{11}=2$ 的类型 $t$，将各潜在结果取为该类型的相应分量，定义
+\begin{equation}
+\begin{aligned}
+R(1\mid t,\mathcal E_2)&=\tfrac12\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\},\\
+R(2\mid t,\mathcal E_2)&=\tfrac12\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\},\\
+R(0\mid t,\mathcal E_2)&=Y_{00}.
+\end{aligned}
+\label{eq:responsibility}
+\end{equation}
+其中 $0$ 表示无暴露背景。对满足 $t_{11}=1$ 的类型，$R(j\mid t,\mathcal E_1)$
+由同一规则定义。对 $j=0,1,2$，病例平均责任为
+\begin{equation}
+\begin{aligned}
+\mathcal R_j(\mathcal E_1)
+ &=\sum_{t:\,t_{11}=1}R(j\mid t,\mathcal E_1)\,
+     \mathrm{pr}(T=t\mid\mathcal E_1),\\
+\mathcal R_j(\mathcal E_2)
+ &=\sum_{t:\,t_{11}=2}R(j\mid t,\mathcal E_2)\,
+     \mathrm{pr}(T=t\mid\mathcal E_2).
+\end{aligned}
+\label{eq:target}
+\end{equation}
+
+\section{假设}
+\begin{assumption}[一致性、随机分配与正值性]\label{ass:observed}
+当 $(X_1,X_2)$ 分别为 $(0,0),(0,1),(1,0),(1,1)$ 时，
+观测结局分别等于 $Y_{00},Y_{01},Y_{10},Y_{11}$。此外，
+\[
+(X_1,X_2)\indep T,\qquad
+\mathrm{pr}(X_1=a,X_2=b)>0,\quad a,b=0,1.
+\]
+\end{assumption}
+
+\begin{assumption}[单步单调增量]\label{ass:unit}
+下列不等式几乎处处成立：
+\begin{equation}
+\begin{aligned}
+0\le Y_{10}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{10}\le1,\\
+0\le Y_{01}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{01}\le1.
+\end{aligned}
+\label{eq:unit}
+\end{equation}
+\end{assumption}
+
+\begin{assumption}[Markov 条件]\label{ass:markov}
+同一个潜在结果联合分布满足
+\begin{equation}
+Y_{11}\indep Y_{00}\mid Y_{10},
+\qquad
+Y_{11}\indep Y_{00}\mid Y_{01}.
+\label{eq:markov}
+\end{equation}
+\end{assumption}
+
+\clearpage
+\section{定理}
+记
+\[
+\begin{aligned}
+\xi_{00}&=\mathrm{pr}(Y_{00}=2),&\qquad
+\xi_{01}&=\mathrm{pr}(Y_{01}=2),\\
+\xi_{10}&=\mathrm{pr}(Y_{10}=2),&\qquad
+\xi_{11}&=\mathrm{pr}(Y_{11}=2),
+\end{aligned}
+\]
+以及 $\theta=\mathrm{pr}(Y_{00}=0,Y_{11}=2)$。
+
+\begin{theorem}[病例平均责任的点识别]
+在假设~\ref{ass:observed}--\ref{ass:markov} 下，
+$\mathcal R_j(\mathcal E_1)$ 和 $\mathcal R_j(\mathcal E_2)$
+在相应病例事件发生概率为正时均可由观测分布点识别。
+其中
+\begin{equation}
+\theta=
+\begin{cases}
+\dfrac{\{\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)\}
+       (\xi_{11}-\xi_{10})}
+      {\mathrm{pr}(Y_{10}=1)},
+   & \mathrm{pr}(Y_{10}=1)>0,\\[10pt]
+0, & \mathrm{pr}(Y_{10}=1)=0.
+\end{cases}
+\label{eq:theta}
+\end{equation}
+当 $\xi_{11}>0$ 时，
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\[4pt]
+\mathcal R_2(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\[4pt]
+\mathcal R_0(\mathcal E_2)
+ &=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
+\end{aligned}
+\label{eq:grade2}
+\end{equation}
+当 $\mathrm{pr}(Y_{11}=1)>0$ 时，
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_1)
+ &=\frac{\mathrm E\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+       -\xi_{11}+\xi_{01}-\xi_{10}+\xi_{00}-\theta}
+      {2\mathrm{pr}(Y_{11}=1)},\\[4pt]
+\mathcal R_2(\mathcal E_1)
+ &=\frac{\mathrm E\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+       -\xi_{11}+\xi_{10}-\xi_{01}+\xi_{00}-\theta}
+      {2\mathrm{pr}(Y_{11}=1)},\\[4pt]
+\mathcal R_0(\mathcal E_1)
+ &=\frac{\mathrm E(Y_{00})-\xi_{11}-\xi_{00}+\theta}
+      {\mathrm{pr}(Y_{11}=1)}.
+\end{aligned}
+\label{eq:grade1}
+\end{equation}
+上述期望均为无条件期望；其被积函数是四个潜在结果的线性组合。
+对发生概率为正的相应事件，
+\[
+\sum_{j=0}^{2}\mathcal R_j(\mathcal E_1)=1,\qquad
+\sum_{j=0}^{2}\mathcal R_j(\mathcal E_2)=2.
+\]
+\end{theorem}
+
+\clearpage
+\section{证明}
+由假设~\ref{ass:observed}，四个潜在结果的边际分布分别由四个暴露组的结局分布识别，
+且式~\eqref{eq:target} 中的条件事件 $\mathcal E_1,\mathcal E_2$
+分别可替换为 $Y_{11}=1,Y_{11}=2$。
+
+假设~\ref{ass:unit} 给出
+\[
+\{Y_{00}=0,Y_{11}=2\}
+=\{Y_{00}=0,Y_{01}=1,Y_{10}=1,Y_{11}=2\},
+\]
+以及
+\begin{equation}
+\begin{aligned}
+\mathrm{pr}(Y_{00}=0,Y_{10}=1)
+ &=\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0),\\
+\mathrm{pr}(Y_{10}=1,Y_{11}=2)&=\xi_{11}-\xi_{10},\\
+\mathrm{pr}(Y_{01}=1,Y_{11}=2)&=\xi_{11}-\xi_{01}.
+\end{aligned}
+\label{eq:adjacent}
+\end{equation}
+当 $\mathrm{pr}(Y_{10}=1)>0$ 时，由假设~\ref{ass:markov}，
+\[
+\begin{aligned}
+\theta
+ &=\mathrm{pr}(Y_{00}=0,Y_{10}=1,Y_{11}=2)\\
+ &=\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
+      \mathrm{pr}(Y_{11}=2\mid Y_{10}=1)\\
+ &=\frac{\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
+           \mathrm{pr}(Y_{10}=1,Y_{11}=2)}
+          {\mathrm{pr}(Y_{10}=1)}.
+\end{aligned}
+\]
+结合式~\eqref{eq:adjacent} 得到式~\eqref{eq:theta}。
+若 $\mathrm{pr}(Y_{10}=1)=0$，则 $\theta=0$。
+
+由单调性及式~\eqref{eq:adjacent}，
+\begin{equation}
+\begin{aligned}
+\mathrm E\{Y_{10}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{10},\\
+\mathrm E\{Y_{01}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{01},\\
+\mathrm E\{Y_{00}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{00}-\theta.
+\end{aligned}
+\label{eq:truncated}
+\end{equation}
+第三式利用了
+\[
+\mathrm{pr}(Y_{00}=1,Y_{11}=2)=\xi_{11}-\xi_{00}-\theta.
+\]
+将式~\eqref{eq:truncated} 代入式~\eqref{eq:responsibility} 的加权期望，
+并在 $\xi_{11}>0$ 时除以 $\xi_{11}$，即得式~\eqref{eq:grade2}。
+
+当 $Y_{11}=0$ 时，假设~\ref{ass:unit} 蕴含 $Y_{00}=Y_{01}=Y_{10}=0$。
+故每个责任函数在 $Y_{11}=1$ 层的未标准化期望，
+等于其无条件期望减去在 $Y_{11}=2$ 层的未标准化期望。
+对式~\eqref{eq:responsibility} 的三个责任函数分别应用该分解，结合式~\eqref{eq:truncated}，
+并除以 $\mathrm{pr}(Y_{11}=1)$，即得式~\eqref{eq:grade1}。
+此推导也适用于 $\xi_{11}=0$。
+
+式~\eqref{eq:theta}--\eqref{eq:grade1} 仅依赖可识别的边际概率及边际均值。
+三个责任函数之和恒为 $Y_{11}$，故两类病例中的平均责任分别合计为 $1$ 和 $2$。
+\hfill$\square$
+
+\ifPDFTeX\end{CJK*}\fi
+\end{document}
