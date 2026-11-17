@@ -1,0 +1,8 @@
+__pycache__/
+results/*.pdf
+results/*.png
+results/report.tex
+results/*.aux
+results/*.log
+results/*.out
+results/*.synctex.gz
