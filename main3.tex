@@ -1,0 +1,368 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
+\pagestyle{plain}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+% Use a single stroke for Chinese headings when pdfLaTeX has no bold CJK font.
+\newcommand{\headingweight}{\ifPDFTeX\mdseries\else\bfseries\fi}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\headingweight}}
+\makeatother
+
+\newcommand{\indep}{\mathrel{\perp\!\!\!\perp}}
+\begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
+\begin{center}
+  {\LARGE\headingweight 集合记号下的有序结局 Shapley 归因}\\[5pt]
+  {\large 单步增量与嵌套潜在结果的条件独立}
+\end{center}
+
+\section{潜在结果与识别条件}
+设 $N=\{1,\ldots,p\}$，暴露均为二元变量。对 $S\subseteq N$，用 $Y(S)$ 表示
+恰好令 $S$ 中的暴露取 $1$、其余暴露取 $0$ 时的潜在结果。
+特别地，$Y(\varnothing)$ 和 $Y(N)$ 分别表示无暴露与全暴露的结局。
+设 $Y(S)\in\{0,\ldots,K\}$，越高表示越严重；本文按每升一级计 $1$ 分进行归因，
+这是对等级分数的约定。
+
+记全部潜在结果为 $T=(Y(S):S\subseteq N)$。假设一致性成立，联合暴露与 $T$ 独立，
+且全部 $2^p$ 种暴露组合均有正概率。对正等级 $k$，定义
+\[
+\mathcal E_k=\{X_1=\cdots=X_p=1,\ Y=k\},\qquad
+\mathrm{pr}\{Y(N)=k\}>0.
+\]
+因此，病例中的潜在结果分布等于给定 $Y(N)=k$ 的分布。
+
+\medskip
+\noindent{\headingweight 条件一：单步单调增量。}
+对每个 $S\subsetneq N$ 和 $j\notin S$，假设几乎处处有
+\begin{equation}
+0\le Y(S\cup\{j\})-Y(S)\le1.
+\label{eq:unit}
+\end{equation}
+多个暴露合起来可以使结局升高多个等级。
+
+\medskip
+\noindent{\headingweight 条件二：嵌套潜在结果的条件独立。}
+对每个 $A\subsetneq S\subsetneq N$ 和 $j\notin S$，假设
+\begin{equation}
+Y(S\cup\{j\})\indep Y(A)\mid Y(S).
+\label{eq:nested}
+\end{equation}
+即在 $Y(S)$ 相同的人中，加入暴露 $j$ 后的结局分布与较早组合 $A$ 下的结局无关。
+这里要求所有真子集 $A\subsetneq S$，也包括 $A=\varnothing$。
+这些都是同一个体的潜在结果，故式~\eqref{eq:nested} 是额外的跨潜在结果假设。
+对每条加入路径施加完整的 Markov 条件可推出式~\eqref{eq:nested}；
+以下识别证明只需要式~\eqref{eq:nested} 中的成对条件独立。
+
+\section{相邻组合的联合分布}
+记 $F_S(r)=\mathrm{pr}\{Y(S)\le r\}$，$f_S(r)=F_S(r)-F_S(r-1)$，约定 $F_S(-1)=0$。
+由随机分配及一致性，
+\[
+F_S(r)=\mathrm{pr}(Y\le r\mid X_j=1\ (j\in S),\ X_j=0\ (j\notin S)).
+\]
+条件~\eqref{eq:unit} 给出
+\begin{equation}
+\begin{aligned}
+\mathrm{pr}\{Y(S)=r,Y(S\cup\{j\})=r+1\}
+ &=F_S(r)-F_{S\cup\{j\}}(r), &&0\le r<K,\\
+\mathrm{pr}\{Y(S)=r,Y(S\cup\{j\})=r\}
+ &=F_{S\cup\{j\}}(r)-F_S(r-1), &&0\le r\le K.
+\end{aligned}
+\label{eq:edge}
+\end{equation}
+其余联合概率为零。第一式利用了事件 $Y(S)\le r<Y(S\cup\{j\})$
+只能对应从 $r$ 升到 $r+1$，第二式再由边际概率相减得到。
+所以每条单步路径的联合分布均可识别。
+
+\clearpage
+\section{递推识别嵌套组合的联合分布}
+对 $j\notin S$，记相邻组合的转移矩阵为 $Q_{S,j}$。
+当 $f_S(a)>0$ 时，式~\eqref{eq:edge} 给出
+\begin{equation}
+Q_{S,j}(a,b)=
+\begin{cases}
+\dfrac{F_{S\cup\{j\}}(a)-F_S(a-1)}{f_S(a)}, & b=a,\\[7pt]
+\dfrac{F_S(a)-F_{S\cup\{j\}}(a)}{f_S(a)}, & b=a+1,\\[7pt]
+0, & \text{其他情形},
+\end{cases}
+\qquad a,b\in\{0,\ldots,K\}.
+\label{eq:transition}
+\end{equation}
+若 $f_S(a)=0$，可将该行选为在 $a$ 处概率为 $1$ 的行向量；
+该行不影响具有正概率的潜在结果的联合分布。
+
+取任意 $A\subsetneq B$，选一条逐次加入暴露的路径
+\[
+A=S_0\subset S_1\subset\cdots\subset S_m=B,\qquad
+S_\ell=S_{\ell-1}\cup\{j_\ell\}.
+\]
+定义矩阵
+\[
+H_{A,B}=Q_{S_0,j_1}Q_{S_1,j_2}\cdots Q_{S_{m-1},j_m},
+\qquad H_{A,A}=I.
+\]
+则在 $f_A(a)>0$ 时，
+\begin{equation}
+\mathrm{pr}\{Y(A)=a,Y(B)=b\}=f_A(a)H_{A,B}(a,b).
+\label{eq:pair}
+\end{equation}
+当 $f_A(a)=0$ 时，两侧均按零计。
+
+\medskip
+\noindent{\headingweight 证明。}
+路径只有一步时，结论即为式~\eqref{eq:transition}。
+若 $m\ge2$，对 $A\subsetneq S_{m-1}$ 使用条件~\eqref{eq:nested}，得到
+\[
+\begin{aligned}
+&\mathrm{pr}\{Y(A)=a,Y(S_m)=b\}\\
+&\qquad=\sum_{c=0}^{K}
+ \mathrm{pr}\{Y(A)=a,Y(S_{m-1})=c\}\,
+ Q_{S_{m-1},j_m}(c,b).
+\end{aligned}
+\]
+概率为零的条件事件对应零贡献。由归纳法即得式~\eqref{eq:pair}。
+这一论证识别的是两个嵌套潜在结果的联合分布，
+不需要把整条路径的联合分布写成 Markov 乘积。
+
+\medskip
+\noindent{\headingweight 条件均值。}
+令 $\mu_S(k)=\mathrm E\{Y(S)\mid Y(N)=k\}$。由式~\eqref{eq:pair}，
+\begin{equation}
+\mu_S(k)=
+\frac{\displaystyle\sum_{a=0}^{K}a\,f_S(a)H_{S,N}(a,k)}
+     {f_N(k)},\qquad S\subseteq N.
+\label{eq:mu}
+\end{equation}
+因此所有 $\mu_S(k)$ 均由各暴露组的结局分布识别，且 $\mu_N(k)=k$。
+
+\medskip
+\noindent{\headingweight 路径相容性。}
+条件~\eqref{eq:nested} 对同一个 $T$ 的联合分布成立。
+因此，不同路径算出的 $f_A(a)H_{A,B}(a,b)$ 必须相同。
+这是模型的必要限制；本结果以存在满足全部条件的联合分布为前提。
+仅检查不同路径的端点概率一致，并不能代替这个存在性要求。
+
+\clearpage
+\section{任意 $p$ 个暴露的 Shapley 责任}
+对给定类型 $T$，暴露 $j$ 的责任及背景责任定义为
+\begin{equation}
+\begin{aligned}
+R(j\mid T,\mathcal E_k)
+ &=\sum_{S\subseteq N\setminus\{j\}}
+ \frac{|S|!\,(p-|S|-1)!}{p!}
+ \{Y(S\cup\{j\})-Y(S)\},\\
+R(\varnothing\mid T,\mathcal E_k)&=Y(\varnothing).
+\end{aligned}
+\label{eq:shapley}
+\end{equation}
+在 $p!$ 种加入顺序中，恰好有 $|S|!(p-|S|-1)!$ 种以 $S$ 作为暴露 $j$
+之前已经加入的全部暴露，故式~\eqref{eq:shapley} 是所有顺序下的增量平均。
+当 $Y(N)=k$ 时，背景与所有暴露的责任之和为 $k$。
+
+病例平均责任用相容类型在病例中的条件概率加权：
+\[
+\mathcal R_j(\mathcal E_k)
+=\sum_{t:\,Y(N;t)=k}R(j\mid t,\mathcal E_k)\,
+ \mathrm{pr}(T=t\mid\mathcal E_k),
+\]
+其中 $Y(N;t)$ 表示类型 $t$ 的全暴露潜在结果，
+背景使用同一加权规则。由随机分配，可以将条件事件替换为 $Y(N)=k$。
+
+\medskip
+\noindent{\headingweight 命题。}
+在一致性、联合随机分配、正值性及条件~\eqref{eq:unit}--\eqref{eq:nested} 下，
+对任意 $p,K$ 和发生概率为正的 $\mathcal E_k$，各项病例平均责任均可点识别，且
+\begin{equation}
+\begin{aligned}
+\mathcal R_j(\mathcal E_k)
+ &=\sum_{S\subseteq N\setminus\{j\}}
+   \frac{|S|!\,(p-|S|-1)!}{p!}
+   \{\mu_{S\cup\{j\}}(k)-\mu_S(k)\},\qquad j\in N,\\
+\mathcal R_{\varnothing}(\mathcal E_k)&=\mu_{\varnothing}(k).
+\end{aligned}
+\label{eq:identify}
+\end{equation}
+式中每个条件均值均由式~\eqref{eq:mu} 给出。
+
+\medskip
+\noindent{\headingweight 证明。}
+对式~\eqref{eq:shapley} 取给定 $Y(N)=k$ 的条件期望，利用期望的线性性，
+立即得到式~\eqref{eq:identify}。单步联合分布和嵌套条件独立分别用于式~\eqref{eq:edge}
+和式~\eqref{eq:pair}，从而识别每个条件均值。
+对每种顺序，增量之和均为 $Y(N)-Y(\varnothing)$，所以
+\[
+\mathcal R_{\varnothing}(\mathcal E_k)
++\sum_{j=1}^{p}\mathcal R_j(\mathcal E_k)=k.
+\]
+这里分配的是完整结局等级分数，目标责任的定义与原有定义一致。
+
+\medskip
+\noindent{\headingweight 条件可共同成立的例子。}
+设 $B,D_1,\ldots,D_p$ 相互独立，$B\in\{0,\ldots,K\}$，
+各 $D_j\in\{0,1\}$，定义
+\[
+Y(S)=\min\!\left\{K,\ B+\sum_{j\in S}D_j\right\}.
+\]
+单步升级至多为 $1$。给定 $Y(S)$ 后，$Y(S\cup\{j\})$ 只依赖独立的 $D_j$；
+到达 $K$ 后不再升级。因此条件~\eqref{eq:unit}--\eqref{eq:nested} 同时成立。
+这只是一个相容模型的例子，识别命题并不要求所有潜在结果都具有这个形式。
+
+\clearpage
+\section{两个暴露的具体公式}
+令 $N=\{1,2\}$，则
+\[
+Y(\varnothing)=Y_{00},\qquad Y(\{1\})=Y_{10},\qquad
+Y(\{2\})=Y_{01},\qquad Y(N)=Y_{11}.
+\]
+此时条件~\eqref{eq:nested} 恰好为
+\begin{equation}
+Y_{11}\indep Y_{00}\mid Y_{10},
+\qquad
+Y_{11}\indep Y_{00}\mid Y_{01}.
+\label{eq:p2}
+\end{equation}
+两个条件分别对应先加入 $X_1$ 和先加入 $X_2$ 的顺序。
+在单步增量条件下，相邻的四对潜在结果均可识别。
+例如，当 $\mathrm{pr}(Y_{10}=b)>0$ 时，第一条条件给出
+\[
+\mathrm{pr}(Y_{00}=a,Y_{10}=b,Y_{11}=c)
+=
+\frac{\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+      \mathrm{pr}(Y_{10}=b,Y_{11}=c)}
+     {\mathrm{pr}(Y_{10}=b)}.
+\]
+对 $b$ 求和即可识别背景与全暴露结局的联合分布。
+对每个发生概率为正的 $\mathcal E_k$，
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_k)
+ &=\tfrac12\{\mu_{\{1\}}(k)-\mu_{\varnothing}(k)
+                 +k-\mu_{\{2\}}(k)\},\\
+\mathcal R_2(\mathcal E_k)
+ &=\tfrac12\{\mu_{\{2\}}(k)-\mu_{\varnothing}(k)
+                 +k-\mu_{\{1\}}(k)\},\\
+\mathcal R_{\varnothing}(\mathcal E_k)&=\mu_{\varnothing}(k).
+\end{aligned}
+\label{eq:p2-responsibility}
+\end{equation}
+两条条件~\eqref{eq:p2} 算出的端点联合分布必须相同。
+对 $p=2$ 的责任识别，四条单步增量条件加上其中一条条件独立已经足够；
+同时列出两条是一般条件~\eqref{eq:nested} 的对称表述。
+
+\medskip
+\noindent{\headingweight 当 $Y\in\{0,1,2\}$ 且观测到二级。}
+沿用 $\xi_{ab}=\mathrm{pr}(Y_{ab}=2)$。本节按 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$ 排列，
+记 $\theta=\mathrm{pr}(T=0112)$。
+单步增量条件下，$T=0112$ 等价于 $Y_{00}=0,Y_{11}=2$。
+当 $\mathrm{pr}(Y_{10}=1)>0$ 时，第一条条件~\eqref{eq:p2} 给出
+\[
+\theta=
+\frac{\{\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)\}
+      (\xi_{11}-\xi_{10})}
+     {\mathrm{pr}(Y_{10}=1)}.
+\]
+若分母为零，则 $\theta=0$。因此
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
+\mathcal R_2(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
+\mathcal R_{\varnothing}(\mathcal E_2)
+ &=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
+\end{aligned}
+\label{eq:p2-prob}
+\end{equation}
+这些公式识别的是原始等级分数的 Shapley 责任，而非对二元阈值结局另作定义。
+
+\clearpage
+\section{为什么不能只比较相邻三步}
+在式 $Y(S\cup\{j\})\indep Y(S\setminus\{j\})\mid Y(S)$ 中，
+若 $j\notin S$，则 $S\setminus\{j\}=S$；若 $j\in S$，则 $S\cup\{j\}=S$。
+因此无论哪种情形，独立式的一侧都是条件中的 $Y(S)$，该式自动成立，
+没有增加识别所需的信息。
+
+若将加入和移除的暴露改为不同下标，可得到有实质内容的局部条件
+\begin{equation}
+Y(S\cup\{j\})\indep Y(S\setminus\{i\})\mid Y(S),
+\qquad i\in S,\quad j\notin S.
+\label{eq:local}
+\end{equation}
+对 $p=2$，这正是式~\eqref{eq:p2}。对一般 $p$，
+式~\eqref{eq:local} 只考察相邻三个组合，不足以推出所需的识别结果。
+
+\medskip
+\noindent{\headingweight 三个暴露的反例。}
+令 $p=3$、$Y\in\{0,1,2\}$，并在所有人中设
+\[
+Y(S)=1,\qquad 1\le |S|\le2.
+\]
+考虑下表两个总体；每行所列的两个端点取值各占一半。
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+总体 & $(Y(\varnothing),Y(N))$ & $\mathcal R_j(\mathcal E_2)$，$j=1,2,3$
+ & 背景责任\\
+\midrule
+A & $(0,1)$ 或 $(1,2)$ & $1/3$ & $1$\\
+B & $(0,2)$ 或 $(1,1)$ & $2/3$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+两个总体都满足每加入一个暴露最多升一级，也满足全部局部条件~\eqref{eq:local}。
+当 $|S|=1$ 时，独立式左侧的潜在结果恒为 $1$；
+当 $|S|=2$ 时，右侧的潜在结果恒为 $1$。因此这些局部条件无法区分两个总体。
+
+两总体在每个暴露组合下的结局分布完全相同：
+$Y(\varnothing)$ 各以一半概率取 $0,1$，$Y(N)$ 各以一半概率取 $1,2$，
+其余六个潜在结果恒为 $1$。在相同的随机分配机制下，观测分布因而相同。
+
+对于任一暴露 $j$，它以 $1/3$ 的概率排在第一位、中间和最后。
+对应增量分别为 $1-Y(\varnothing)$、$0$ 和 $Y(N)-1$。
+所以在 $Y(N)=2$ 的病例中，
+\[
+R(j\mid T,\mathcal E_2)=\frac{2-Y(\varnothing)}{3}.
+\]
+总体 A 的二级病例均有 $Y(\varnothing)=1$，每个暴露贡献 $1/3$ 分；
+总体 B 的二级病例均有 $Y(\varnothing)=0$，每个暴露贡献 $2/3$ 分。
+这说明即使再加上单步增量限制，局部条件~\eqref{eq:local} 仍不能识别病例责任。
+
+条件~\eqref{eq:nested} 则还要求，例如
+\[
+Y(\{1,2,3\})\indep Y(\varnothing)\mid Y(\{1,2\}).
+\]
+在本例中，这要求两个端点独立，因而排除了上述两种依赖结构。
+允许 $A$ 为更早的任意子集，正是递推公式~\eqref{eq:pair} 在一般 $p$ 下成立所需的条件。
+
+\ifPDFTeX\end{CJK*}\fi
+\end{document}
