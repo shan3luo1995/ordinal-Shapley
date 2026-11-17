@@ -47,28 +47,27 @@
 个体类型记作 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$。
 例如，$0001$ 表示只有在两个暴露同时存在时，结局才从 $0$ 升到 $1$。
 
-记 $\mathcal E_k=(X_1=1,X_2=1,Y=k)$。由一致性，类型的末位必须是 $t_{11}=k$。
-假设加入任一暴露均不会降低等级。与 $\mathcal E_k$ 相容的类型恰好满足
-$t_{00}\le t_{01}\le t_{11}=k$ 和 $t_{00}\le t_{10}\le t_{11}=k$。
-固定末位后，逐一列出前三位的可行取值，得到
+两个暴露均存在时，按实际结局区分下列三个观测事件。由一致性，此时 $t_{11}=Y$。
+假设加入任一暴露均不会降低结局，即 $t_{00}\le t_{01}\le t_{11}$ 且
+$t_{00}\le t_{10}\le t_{11}$。各事件的定义和相容类型如下。
 \[
-\begin{array}{@{}l@{\qquad}l@{}}
- \mathcal E_0\ (1\text{ 种})  & 0000\\
- \mathcal E_1\ (5\text{ 种})  & 0001,\ 0011,\ 0101,\ 0111,\ 1111\\
- \mathcal E_2\ (14\text{ 种}) & 0002,\ 0012,\ 0022,\ 0102,\ 0112,\ 0122,\ 0202,\\
-                              & 0212,\ 0222,\ 1112,\ 1122,\ 1212,\ 1222,\ 2222 .
+\begin{array}{@{}l@{\quad}l@{}}
+ \mathcal E_0=\{X_1=X_2=1,Y=0\} & 0000\\
+ \mathcal E_1=\{X_1=X_2=1,Y=1\} & 0001,\ 0011,\ 0101,\ 0111,\ 1111\\
+ \mathcal E_2=\{X_1=X_2=1,Y=2\} & 0002,\ 0012,\ 0022,\ 0102,\ 0112,\ 0122,\ 0202,\\
+ & 0212,\ 0222,\ 1112,\ 1122,\ 1212,\ 1222,\ 2222 .
 \end{array}
 \]
-给定其中一个类型 $t$，将 $Y_{ab}=t_{ab}$ 代入下式。按两种加入顺序各取一半权重，两个暴露的
-Shapley 责任及空集 $\phi$ 的背景责任分别为
+以 $\mathcal E_2$ 为例。对其相容类型 $t$，取 $Y_{ab}=t_{ab}$，两种加入顺序各占一半。
+两个暴露和无暴露背景（空集 $\phi$）的责任为
 \[
 \begin{aligned}
- R(1\mid t,\mathcal E_k)&=\tfrac12[(Y_{10}-Y_{00})+(Y_{11}-Y_{01})],\\
- R(2\mid t,\mathcal E_k)&=\tfrac12[(Y_{01}-Y_{00})+(Y_{11}-Y_{10})],\\
- R(\phi\mid t,\mathcal E_k)&=Y_{00}.
+ R(1\mid t,\mathcal E_2)&=\tfrac12[(Y_{10}-Y_{00})+(Y_{11}-Y_{01})],\\
+ R(2\mid t,\mathcal E_2)&=\tfrac12[(Y_{01}-Y_{00})+(Y_{11}-Y_{10})],\\
+ R(\phi\mid t,\mathcal E_2)&=Y_{00}.
 \end{aligned}
 \]
-下表逐行给出三项责任（单位为分），每行之和为该类型的观测等级 $k$。
+对 $\mathcal E_0$ 和 $\mathcal E_1$，代入相应类型即可。表中 $R_j(t)$ 表示该行观测事件下的责任（分），每行之和为 $t_{11}$。
 
 \begin{center}
 \small
@@ -81,23 +80,23 @@ Shapley 责任及空集 $\phi$ 的背景责任分别为
                         @{\extracolsep{\fill}}r@{\extracolsep{0pt}\(\,=\,\)}l
                         @{\extracolsep{\fill}}c@{}}
 \toprule
-观测等级 & 类型
+观测事件 & 类型
  & \multicolumn{2}{c}{暴露 $X_1$}
  & \multicolumn{2}{c}{暴露 $X_2$} & 背景\\[1pt]
-$k$ & $t$
- & \multicolumn{2}{c}{$R(1\mid t,\mathcal E_k)$}
- & \multicolumn{2}{c}{$R(2\mid t,\mathcal E_k)$}
- & $R(\phi\mid t,\mathcal E_k)$\\
+ & $t$
+ & \multicolumn{2}{c}{$R_1(t)$}
+ & \multicolumn{2}{c}{$R_2(t)$}
+ & $R_\phi(t)$\\
 \midrule
-$0$ 级 & $0000$ & $[(0-0)+(0-0)]/2$ & $0$ & $[(0-0)+(0-0)]/2$ & $0$ & $0$ \\
+$\mathcal E_0$ & $0000$ & $[(0-0)+(0-0)]/2$ & $0$ & $[(0-0)+(0-0)]/2$ & $0$ & $0$ \\
 \midrule[0.3pt]
-$1$ 级 & $0001$ & $[(0-0)+(1-0)]/2$ & $1/2$ & $[(0-0)+(1-0)]/2$ & $1/2$ & $0$ \\
+$\mathcal E_1$ & $0001$ & $[(0-0)+(1-0)]/2$ & $1/2$ & $[(0-0)+(1-0)]/2$ & $1/2$ & $0$ \\
  & $0011$ & $[(1-0)+(1-0)]/2$ & $1$ & $[(0-0)+(1-1)]/2$ & $0$ & $0$ \\
  & $0101$ & $[(0-0)+(1-1)]/2$ & $0$ & $[(1-0)+(1-0)]/2$ & $1$ & $0$ \\
  & $0111$ & $[(1-0)+(1-1)]/2$ & $1/2$ & $[(1-0)+(1-1)]/2$ & $1/2$ & $0$ \\
  & $1111$ & $[(1-1)+(1-1)]/2$ & $0$ & $[(1-1)+(1-1)]/2$ & $0$ & $1$ \\
 \midrule[0.3pt]
-$2$ 级 & $0002$ & $[(0-0)+(2-0)]/2$ & $1$ & $[(0-0)+(2-0)]/2$ & $1$ & $0$ \\
+$\mathcal E_2$ & $0002$ & $[(0-0)+(2-0)]/2$ & $1$ & $[(0-0)+(2-0)]/2$ & $1$ & $0$ \\
  & $0012$ & $[(1-0)+(2-0)]/2$ & $3/2$ & $[(0-0)+(2-1)]/2$ & $1/2$ & $0$ \\
  & $0022$ & $[(2-0)+(2-0)]/2$ & $2$ & $[(0-0)+(2-2)]/2$ & $0$ & $0$ \\
  & $0102$ & $[(0-0)+(2-1)]/2$ & $1/2$ & $[(1-0)+(2-0)]/2$ & $3/2$ & $0$ \\
@@ -117,22 +116,23 @@ $2$ 级 & $0002$ & $[(0-0)+(2-0)]/2$ & $1$ & $[(0-0)+(2-0)]/2$ & $1$ & $0$ \\
 
 \clearpage
 \section*{相容类型的加权平均}
-设 $\mathrm{pr}(\mathcal E_k)>0$。在观测组 $\mathcal E_k$ 内，每个相容类型 $t$ 的权重为
-$\mathrm{pr}(T=t\mid\mathcal E_k)$。这些条件概率在该组内之和为 $1$。对 $j\in\{1,2,\phi\}$，
+对发生概率为正的观测事件，以该事件下的条件类型概率为权重。对 $j\in\{1,2,\phi\}$，
 \[
- \mathcal R_j(\mathcal E_k)
- =\sum_{t\text{ 与 }\mathcal E_k\text{ 相容}}
-    R(j\mid t,\mathcal E_k)\,\mathrm{pr}(T=t\mid\mathcal E_k).
+\begin{aligned}
+ \mathcal R_j(\mathcal E_0)&=R(j\mid 0000,\mathcal E_0)\,\mathrm{pr}(T=0000\mid\mathcal E_0),\\
+ \mathcal R_j(\mathcal E_1)&=\sum_{t:\,t_{11}=1}R(j\mid t,\mathcal E_1)\,\mathrm{pr}(T=t\mid\mathcal E_1),\\
+ \mathcal R_j(\mathcal E_2)&=\sum_{t:\,t_{11}=2}R(j\mid t,\mathcal E_2)\,\mathrm{pr}(T=t\mid\mathcal E_2).
+\end{aligned}
 \]
 
-\noindent{\headingweight $0$ 级。} 此时 $Y_{11}=0$，而单调性要求其他三个潜在等级均不超过 $Y_{11}$。
-$0$ 级已是最低等级，故 $\mathrm{pr}(T=0000\mid\mathcal E_0)=1$。两个暴露的等级增量和无暴露时的评分均为零。由表可得
+\noindent{\headingweight $\mathcal E_0$。} 此时 $Y_{11}=0$，而单调性要求其他三个潜在等级均不超过 $Y_{11}$。
+因 $Y_{ab}\ge 0$，故 $\mathrm{pr}(T=0000\mid\mathcal E_0)=1$。两个暴露的等级增量和无暴露时的评分均为零。由表可得
 \[
  \mathcal R_1(\mathcal E_0)=0,\qquad \mathcal R_2(\mathcal E_0)=0,\qquad
  \mathcal R_\phi(\mathcal E_0)=0 .
 \]
 
-\noindent{\headingweight $1$ 级。} 若 $Y_{00}=0$，则 $Y_{01}$ 和 $Y_{10}$ 各可取 $0$ 或 $1$，
+\noindent{\headingweight $\mathcal E_1$。} 若 $Y_{00}=0$，则 $Y_{01}$ 和 $Y_{10}$ 各可取 $0$ 或 $1$，
 得到 $0001$、$0011$、$0101$、$0111$ 四种类型。$\mathcal E_1$ 也允许 $Y_{00}=1$，
 这时单调性给出第五种类型 $1111$。用这五种类型在 $\mathcal E_1$ 中的条件概率加权，得到
 \[
@@ -147,7 +147,7 @@ $0$ 级已是最低等级，故 $\mathrm{pr}(T=0000\mid\mathcal E_0)=1$。两个
 \end{aligned}
 \]
 
-\noindent{\headingweight $2$ 级。} 按 $\mathrm{pr}(T=t\mid\mathcal E_2)$ 对十四行加权。
+\noindent{\headingweight $\mathcal E_2$。} 按 $\mathrm{pr}(T=t\mid\mathcal E_2)$ 对十四行加权。
 责任值相同的行可以合并，其权重为这些类型的条件概率之和。于是
 \[
 \begin{aligned}
@@ -166,21 +166,26 @@ $0$ 级已是最低等级，故 $\mathrm{pr}(T=0000\mid\mathcal E_0)=1$。两个
       +2\,\mathrm{pr}(T=2222\mid\mathcal E_2).
 \end{aligned}
 \]
-在每组内，$\mathcal R_\phi(\mathcal E_k)=\mathrm E(Y_{00}\mid\mathcal E_k)$，
-三个加权平均之和为 $k$。
+背景责任为相应事件下 $Y_{00}$ 的条件均值。在 $\mathcal E_0,\mathcal E_1,\mathcal E_2$ 中，
+两个暴露与背景的平均责任之和分别为 $0,1,2$。
 
 \section*{与潜在结果条件期望的关系}
-简记 $R_j(t)=R(j\mid t,\mathcal E_{t_{11}})$。由一致性，
-$\mathcal R_j(\mathcal E_k)=\mathrm E\{R_j(T)\mid X_1=1,X_2=1,Y_{11}=k\}$。
+由一致性，每个事件都同时限定 $X_1=X_2=1$ 和 $Y_{11}$ 的取值。
 若联合暴露 $(X_1,X_2)$ 与 $T$ 独立（例如联合随机分配暴露），则
 \[
- \mathcal R_j(\mathcal E_k)=\mathrm E\{R_j(T)\mid Y_{11}=k\}
- =\frac{\mathrm E[R_j(T)\mathbf 1\{Y_{11}=k\}]}{\mathrm{pr}(Y_{11}=k)} .
+\begin{aligned}
+ \mathcal R_j(\mathcal E_0)&=\mathrm E\{R_j(T)\mid Y_{11}=0\}
+ =\frac{\mathrm E[R_j(T)\mathbf 1\{Y_{11}=0\}]}{\mathrm{pr}(Y_{11}=0)},\\
+ \mathcal R_j(\mathcal E_1)&=\mathrm E\{R_j(T)\mid Y_{11}=1\}
+ =\frac{\mathrm E[R_j(T)\mathbf 1\{Y_{11}=1\}]}{\mathrm{pr}(Y_{11}=1)},\\
+ \mathcal R_j(\mathcal E_2)&=\mathrm E\{R_j(T)\mid Y_{11}=2\}
+ =\frac{\mathrm E[R_j(T)\mathbf 1\{Y_{11}=2\}]}{\mathrm{pr}(Y_{11}=2)}.
+\end{aligned}
 \]
 
 \clearpage
-\section*{$1$ 级和 $2$ 级责任的概率展开}
-\noindent{\headingweight $2$ 级。} 代入两个暴露的 Shapley 值，得到
+\section*{$\mathcal E_1$ 和 $\mathcal E_2$ 下的责任展开}
+\noindent{\headingweight $\mathcal E_2$。} 代入两个暴露的 Shapley 值，得到
 \[
 \begin{aligned}
  \mathcal R_1(\mathcal E_2)
@@ -206,7 +211,7 @@ $\mathcal R_j(\mathcal E_k)=\mathrm E\{R_j(T)\mid X_1=1,X_2=1,Y_{11}=k\}$。
  \nu_{10}&=\mathrm{pr}(Y_{10}=1,Y_{11}=2).
 \end{aligned}
 \]
-例如，$\nu_{10}$ 是同一个体在仅有 $X_1$ 时结局为 $1$ 级、在两个暴露均存在时结局为 $2$ 级的概率。
+例如，$\nu_{10}$ 是同一个体在仅有 $X_1$ 时结局取 $1$、在两个暴露均存在时结局取 $2$的概率。
 将这三项代入，并用 $\mathrm E[Y_{11}\mathbf{1}\{Y_{11}=2\}]=2\xi_{11}$，得到
 \[
 \begin{aligned}
@@ -217,10 +222,10 @@ $\mathcal R_j(\mathcal E_k)=\mathrm E\{R_j(T)\mid X_1=1,X_2=1,Y_{11}=k\}$。
 \end{aligned}
 \]
 两式中 $\nu_{00}$ 前的系数相同，$\nu_{10}-\nu_{01}$ 在两个分子中符号相反。
-若四种暴露组合均以正概率随机分配，各 $\xi_{ab}$ 可由相应组中 $2$ 级结局的比例识别。
+若四种暴露组合均以正概率随机分配，各 $\xi_{ab}$ 可由相应暴露组中 $Y=2$ 的比例识别。
 仅凭各组的结局分布，一般无法确定 $\nu_{00}$ 和 $\nu_{10}-\nu_{01}$，故两个暴露的平均责任一般不能点识别。
 
-\noindent{\headingweight $1$ 级。} 为写成概率展开，令 $\eta_{ab}=\mathrm{pr}(Y_{ab}=1)$，沿用
+\noindent{\headingweight $\mathcal E_1$。} 为写成概率展开，令 $\eta_{ab}=\mathrm{pr}(Y_{ab}=1)$，沿用
 $\nu_{ab}=\mathrm{pr}(Y_{ab}=1,Y_{11}=2)$。由单调性，当 $Y_{ab}=1$ 时，
 $Y_{11}$ 只能是 $1$ 或 $2$。因此对 $ab=00,01,10$，
 \[
@@ -230,7 +235,7 @@ $Y_{11}$ 只能是 $1$ 或 $2$。因此对 $ab=00,01,10$，
  &=\eta_{ab}-\nu_{ab}.
 \end{aligned}
 \]
-第二个等式利用了 $1$ 级病例中 $Y_{ab}$ 只取 $0,1$。
+第二个等式利用了在 $Y_{11}=1$ 时 $Y_{ab}$ 只取 $0,1$。
 当联合暴露 $(X_1,X_2)$ 与 $T$ 独立时，将上式代入 Shapley 公式，得到
 \[
 \begin{aligned}
@@ -241,11 +246,11 @@ $Y_{11}$ 只能是 $1$ 或 $2$。因此对 $ab=00,01,10$，
  \mathcal R_\phi(\mathcal E_1)&=\frac{\eta_{00}-\nu_{00}}{\eta_{11}} .
 \end{aligned}
 \]
-三项责任之和为 $1$。$1$ 级与 $2$ 级责任涉及相同的联合概率 $\nu_{00},\nu_{01},\nu_{10}$。
-它们在两个等级相应的暴露责任分子中符号相反。即使随机分配暴露，单独考察 $1$ 级病例时，
+三项责任之和为 $1$。$\mathcal E_1$ 和 $\mathcal E_2$ 下的责任涉及相同的联合概率 $\nu_{00},\nu_{01},\nu_{10}$。
+它们在 $\mathcal E_1$ 和 $\mathcal E_2$ 对应的暴露责任分子中符号相反。即使随机分配暴露，单独考察 $\mathcal E_1$ 时，
 各项平均责任一般仍不能点识别。
 
-$0$ 级病例只有类型 $0000$，其分配由一致性和单调性直接确定。
+与 $\mathcal E_0$ 相容的类型只有 $0000$，其分配由一致性和单调性直接确定。
 
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
