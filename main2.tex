@@ -97,5 +97,46 @@ $Y_{00}=1,\ Y_{01}=1,\ Y_{10}=2,\ Y_{11}=3$。
 \noindent 表中列出单调性条件 $Y_{00}\le Y_{01}\le Y_{11}$ 和 $Y_{00}\le Y_{10}\le Y_{11}$ 下的全部类型，
 按双暴露时的观测等级 $k=Y_{11}$ 分组。责任值的单位为分。
 
+\clearpage
+\section*{三级病例中每个暴露的总责任}
+记 $\mathcal E_{11}^{+}=\mathcal E_3=(X_1=1,X_2=1,Y=3)$，并设 $\Pr(\mathcal E_3)>0$。
+暴露 $X_j$ 在三级病例中的总责任定义为各类型责任的加权平均。
+这里的权重是该类型在这组病例中所占的比例。对 $j=1,2$，定义
+\[
+ \mathcal R_j(\mathcal E_{11}^{+})
+ =\sum_{t:\,t_{11}=3}
+    R(j\mid t,\mathcal E_3)\,\Pr(T=t\mid\mathcal E_3).
+\]
+其中 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$。求和遍及表中三级组的 14 种类型。
+例如，类型 $1123$ 对 $\mathcal R_1(\mathcal E_{11}^{+})$ 的贡献为
+$\tfrac32\Pr(T=1123\mid\mathcal E_3)$。
+
+为使用表中所有类型的数值，简记 $R_j(t)=R(j\mid t,\mathcal E_{t_{11}})$。
+由一致性，上述加权平均等于
+\[
+ \mathcal R_j(\mathcal E_{11}^{+})
+ =\mathrm E\!\left\{R_j(T)\mid X_1=1,X_2=1,Y_{11}=3\right\}.
+\]
+若联合暴露 $(X_1,X_2)$ 与 $T$ 独立（例如联合随机分配暴露），则
+\[
+\begin{aligned}
+ \mathcal R_j(\mathcal E_{11}^{+})
+ &=\mathrm E\{R_j(T)\mid Y_{11}=3\}\\
+ &=\frac{\mathrm E\!\left[R_j(T)\,\mathbf{1}\{Y_{11}=3\}\right]}
+         {\Pr(Y_{11}=3)} .
+\end{aligned}
+\]
+分母是双暴露下结局为三级的概率。由于 $Y_{11}$ 的取值为 $1,2,3$，
+$\Pr(Y_{11}\ge 1)=1$。
+
+若希望将分子写成一个无条件均值，可定义三级病例的贡献
+$R_j^{(3)}(T)=R_j(T)\,\mathbf{1}\{Y_{11}=3\}$。于是，在上述独立性条件下，
+\[
+ \mathcal R_j(\mathcal E_{11}^{+})
+ =\frac{\mathrm E\{R_j^{(3)}(T)\}}{\Pr(Y_{11}=3)} .
+\]
+表中二级类型 $1112$ 对两个暴露的责任都是 $1/2$。直接使用 $\mathrm E\{R_j(T)\}$
+会把这类二级病例的贡献也计入分子。
+
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
