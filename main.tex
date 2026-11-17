@@ -1,5 +1,5 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=19mm]{geometry}
+\documentclass[11pt,a4paper,fleqn]{article}
+\usepackage[left=15mm,right=15mm,top=15mm,bottom=14mm]{geometry}
 \usepackage{amsmath,xcolor}
 \usepackage{iftex}
 \ifPDFTeX
@@ -24,50 +24,75 @@
 \fi
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\linespread{1.12}
-\setlength{\parskip}{6pt}
-\setlength{\abovedisplayskip}{7pt}
-\setlength{\belowdisplayskip}{7pt}
-\setlength{\abovedisplayshortskip}{3pt}
-\setlength{\belowdisplayshortskip}{3pt}
+\setlength{\mathindent}{0.65em}
+\setlength{\parskip}{3pt}
 \definecolor{accent}{HTML}{24545C}
-\newcommand{\heading}[1]{\par\vspace{7pt}{\sffamily\bfseries\large\color{accent}#1}\par}
+\newcommand{\caseheading}[1]{\par\vspace{6pt}{\sffamily\bfseries\color{accent}#1 个暴露}\par\nobreak\vspace{-8pt}}
 \begin{document}
 \ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
-{\sffamily\bfseries\LARGE 多个暴露对已发生结局的因果责任}\par\vspace{4pt}
-用 $X_j\in\{0,1\}$ 表示第 $j$ 个候选原因对应的暴露，$Y=1$ 表示目标结局发生。
-对一个已观测到 $E=\{X_1=\cdots=X_p=1,\,Y=1\}$ 的个体，我们问：这 $p$ 个暴露对这次结局各自承担多少责任？为此，需要比较同一个体在不同暴露组合下的潜在结果。
+{\sffamily\bfseries\LARGE 多个暴露对已发生结局的 Shapley 责任}\par
+观测到 $X_1=\cdots=X_p=1$ 且 $Y=1$，记这一事实为 $E$。用 $Y_{a_1\cdots a_p}=Y(a_1,\ldots,a_p)$ 表示将各暴露分别设为 $a_1,\ldots,a_p$ 时的潜在结果。下标从左到右对应 $X_1,\ldots,X_p$，例如 $Y_{101}=Y(1,0,1)$。
 
-\heading{暴露组合与潜在结果}
-记 $N=\{1,\ldots,p\}$，用 $\phi$ 表示空集。对任意 $S\subseteq N$，令 $Y(S)$ 表示仅将 $S$ 中的暴露设为 1、其余暴露均设为 0 时的潜在结果。例如，$Y(\phi)$ 是无暴露时的结局，$Y(N)$ 是所有暴露均存在时的结局。由一致性，在 $E$ 下有 $Y(N)=1$。
+计算 $X_1$ 的责任 $r_1$ 时，每一项都只把下标的第一位从 0 改为 1。若其余下标恰有 $k$ 个 1，则这一项的 Shapley 权重为 $k!(p-1-k)!/p!$。这是在全部 $p!$ 种等可能的排列中，这 $k$ 个暴露恰好都在 $X_1$ 之前、其余暴露都在它之后的概率。
+\begingroup
+\normalsize
+\setlength{\abovedisplayskip}{1pt}
+\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\setlength{\jot}{1pt}
 
-\heading{用 Shapley 值分配责任}
-对同一个体，若仅有 $S$ 中的暴露，结局为 $Y(S)$。在此基础上再加入暴露 $j\notin S$，结局为 $Y(S\cup\{j\})$。因此，$j$ 在这一暴露组合下的边际贡献为 $Y(S\cup\{j\})-Y(S)$。
-将 $p$ 个暴露的全部 $p!$ 种排列等权考虑，对 $j$ 的边际贡献取平均，得到暴露 $j$ 对该个体结局的责任
-\[
- r_j=\sum_{S\subseteq N\setminus\{j\}}
- \frac{|S|!\,(p-|S|-1)!}{p!}\,\bigl[Y(S\cup\{j\})-Y(S)\bigr],
- \qquad j=1,\ldots,p .
-\]
-和式中的权重恰是随机排列中排在 $j$ 之前的暴露集合等于 $S$ 的概率。若该个体的潜在结果满足单调性，即对所有 $S$ 和 $j\notin S$ 均有 $Y(S\cup\{j\})\ge Y(S)$，则 $r_j$ 就是在均匀随机排列下，加入 $j$ 时结局从 0 变为 1 的概率。
+\caseheading{两}
+\begin{align*}
+r_1 &= \tfrac{1}{2}(Y_{10}-Y_{00})+\tfrac{1}{2}(Y_{11}-Y_{01}) .
+\end{align*}
 
-定义背景责任 $r_0=Y(\phi)$。沿任一排列加总各步的边际贡献，均得到 $Y(N)-Y(\phi)$，所以在 $E$ 下有 $r_0+\sum_{j=1}^p r_j=1$。各人的责任取决于各自的潜在结果。对具有相同观测事实 $E$ 的人群，第 $j$ 项的平均责任定义为
-\[
- R_j(E)=\mathrm{E}\!\left[r_j\mid X_1=\cdots=X_p=1,\,Y=1\right],\qquad j=0,1,\ldots,p .
-\]
+\caseheading{三}
+\begin{align*}
+r_1 &= \tfrac{1}{3}(Y_{100}-Y_{000}) \\
+ &\quad +\tfrac{1}{6}\bigl[(Y_{110}-Y_{010})+(Y_{101}-Y_{001})\bigr] \\
+ &\quad +\tfrac{1}{3}(Y_{111}-Y_{011}) .
+\end{align*}
 
-\heading{两个暴露与三个暴露的例子}
-当 $p=2$ 时，将两种暴露分别设为 $a,b$ 时的潜在结果记为 $Y(a,b)$。$X_1$ 可以先加入，也可以在 $X_2$ 之后加入。两种顺序各占一半，因此
-\[
- r_1=\tfrac12\bigl[Y(1,0)-Y(0,0)\bigr]
-       +\tfrac12\bigl[Y(1,1)-Y(0,1)\bigr].
-\]
-当 $p=3$ 时，考虑这样一个个体：$X_1$ 单独足以使结局发生，或者 $X_2$ 与 $X_3$ 同时存在也足以使结局发生，其余组合下结局均为 0。在六种排列中，$X_1$ 排第一或第二时使结局从 0 变为 1，共四种。另两种排列分别由 $X_2$ 和 $X_3$ 触发结局。因此 $(r_1,r_2,r_3)=(2/3,1/6,1/6)$，背景责任为 0。
+\caseheading{四}
+\begin{align*}
+r_1 &= \tfrac{1}{4}(Y_{1000}-Y_{0000}) \\
+ &\quad +\tfrac{1}{12}\bigl[(Y_{1100}-Y_{0100})+(Y_{1010}-Y_{0010})+(Y_{1001}-Y_{0001})\bigr] \\
+ &\quad +\tfrac{1}{12}\bigl[(Y_{1110}-Y_{0110})+(Y_{1101}-Y_{0101})+(Y_{1011}-Y_{0011})\bigr] \\
+ &\quad +\tfrac{1}{4}(Y_{1111}-Y_{0111}) .
+\end{align*}
 
-若原始结局 $O\in\{1,2,3\}$，且 3 级最严重，要解释“为何出现 3 级”，只需令 $Y(S)=\mathbf{1}\{O(S)=3\}$，即可沿用上述分配。
+\caseheading{五}
+\begin{align*}
+r_1 &= \tfrac{1}{5}(Y_{10000}-Y_{00000}) \\
+ &\quad +\tfrac{1}{20}\bigl[(Y_{11000}-Y_{01000})+(Y_{10100}-Y_{00100})+(Y_{10010}-Y_{00010})+(Y_{10001}-Y_{00001})\bigr] \\
+ &\quad +\tfrac{1}{30}\bigl[(Y_{11100}-Y_{01100})+(Y_{11010}-Y_{01010})+(Y_{11001}-Y_{01001}) \\
+ &\qquad\quad {}+(Y_{10110}-Y_{00110})+(Y_{10101}-Y_{00101})+(Y_{10011}-Y_{00011})\bigr] \\
+ &\quad +\tfrac{1}{20}\bigl[(Y_{11110}-Y_{01110})+(Y_{11101}-Y_{01101})+(Y_{11011}-Y_{01011})+(Y_{10111}-Y_{00111})\bigr] \\
+ &\quad +\tfrac{1}{5}(Y_{11111}-Y_{01111}) .
+\end{align*}
 
+\caseheading{六}
+\begin{align*}
+r_1 &= \tfrac{1}{6}(Y_{100000}-Y_{000000}) \\
+ &\quad +\tfrac{1}{30}\bigl[(Y_{110000}-Y_{010000})+(Y_{101000}-Y_{001000})+(Y_{100100}-Y_{000100}) \\
+ &\qquad\quad {}+(Y_{100010}-Y_{000010})+(Y_{100001}-Y_{000001})\bigr] \\
+ &\quad +\tfrac{1}{60}\bigl[(Y_{111000}-Y_{011000})+(Y_{110100}-Y_{010100})+(Y_{110010}-Y_{010010})+(Y_{110001}-Y_{010001}) \\
+ &\qquad\quad {}+(Y_{101100}-Y_{001100})+(Y_{101010}-Y_{001010})+(Y_{101001}-Y_{001001}) \\
+ &\qquad\quad {}+(Y_{100110}-Y_{000110})+(Y_{100101}-Y_{000101})+(Y_{100011}-Y_{000011})\bigr] \\
+ &\quad +\tfrac{1}{60}\bigl[(Y_{111100}-Y_{011100})+(Y_{111010}-Y_{011010})+(Y_{111001}-Y_{011001})+(Y_{110110}-Y_{010110}) \\
+ &\qquad\quad {}+(Y_{110101}-Y_{010101})+(Y_{110011}-Y_{010011})+(Y_{101110}-Y_{001110}) \\
+ &\qquad\quad {}+(Y_{101101}-Y_{001101})+(Y_{101011}-Y_{001011})+(Y_{100111}-Y_{000111})\bigr] \\
+ &\quad +\tfrac{1}{30}\bigl[(Y_{111110}-Y_{011110})+(Y_{111101}-Y_{011101})+(Y_{111011}-Y_{011011}) \\
+ &\qquad\quad {}+(Y_{110111}-Y_{010111})+(Y_{101111}-Y_{001111})\bigr] \\
+ &\quad +\tfrac{1}{6}(Y_{111111}-Y_{011111}) .
+\end{align*}
+\endgroup
+\par\smallskip
+求 $r_j$ 时，对调每个潜在结果下标的第 1 位和第 $j$ 位即可。若加入任何一个暴露都不会使结局从 1 变为 0，则$r_j$ 等于随机排列中第 $j$ 个暴露使结局从 0 变为 1 的概率。
+
+背景责任为 $r_0=Y_{0\cdots0}$。由一致性，在 $E$ 下有 $Y_{1\cdots1}=1$，故 $r_0+r_1+\cdots+r_p=1$。病例组的平均责任为 $R_j(E)=\mathrm{E}[r_j\mid E]$。若原始结局 $O$ 有三级且 3 级最严重，可取 $Y_{a_1\cdots a_p}=\mathbf{1}\{O_{a_1\cdots a_p}=3\}$，分配发生 3 级结局的责任。
 \vfill
-{\footnotesize\color{accent} Shapley (1953), \textit{A Value for $n$-Person Games}. \quad
- Luo, Deng, Zhao \& Geng (2026), arXiv:2606.18459.}
+{\footnotesize\color{accent} Shapley (1953), \textit{A Value for $n$-Person Games}. \quad Luo, Deng, Zhao \& Geng (2026), arXiv:2606.18459.}
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
