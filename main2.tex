@@ -39,7 +39,7 @@
 \begin{document}
 \ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
 \begin{center}
-  {\LARGE\headingweight 两个暴露对有序结局的 Shapley 贡献}
+  {\LARGE\headingweight 有序结局的 Shapley 贡献与识别}
 \end{center}
 
 结局 $Y$ 取 $0,1,2$，越高表示越严重，每升一级计 $1$ 分。双暴露时若观测到 $Y=2$，
@@ -312,6 +312,292 @@ $2$ & $0212$ & $\tfrac12[(1-0)+(2-2)]=\tfrac12$ & $\tfrac12[(2-0)+(2-1)]=\tfrac3
 以 $1222$ 和 $0212$ 为例。两者中 $X_1$ 后加入的贡献均为零，
 先加入则分别使结局从中升到大、从小升到中。按跨越的等级数计算，$X_1$ 的责任都是半分。
 若按实际损害计分，这两个值分别为两种升级所对应损害增量的一半。
+
+\clearpage
+\section*{两个暴露的 Markov 识别条件}
+以下给出点识别的充分条件。结局仍取 $0,1,2$，每升一级计 $1$ 分，
+目标为 $\mathcal E_2$ 中两个暴露和背景对完整 $2$ 分的平均贡献。
+假设一致性成立，联合暴露 $(X_1,X_2)$ 与全部潜在结果独立，四种暴露组合都有正概率，
+且 $\mathrm{pr}(Y_{11}=2)>0$。
+
+\medskip
+\noindent{\headingweight 条件一：每加入一个暴露最多升一级。}
+对同一个体的四个潜在结果，假设
+\begin{equation}
+\begin{aligned}
+0\le Y_{10}-Y_{00}\le1,\qquad&0\le Y_{01}-Y_{00}\le1,\\
+0\le Y_{11}-Y_{10}\le1,\qquad&0\le Y_{11}-Y_{01}\le1.
+\end{aligned}
+\label{eq:markov-unit}
+\end{equation}
+这允许两个暴露合起来使结局从 $0$ 升到 $2$，例如类型 $0112$。
+
+\medskip
+\noindent{\headingweight 条件二：沿每种加入顺序满足 Markov 性。}
+两种顺序分别对应潜在结果序列
+\[
+Y_{00},Y_{10},Y_{11}
+\qquad\text{和}\qquad
+Y_{00},Y_{01},Y_{11}.
+\]
+假设
+\begin{equation}
+Y_{11}\perp Y_{00}\mid Y_{10},
+\qquad
+Y_{11}\perp Y_{00}\mid Y_{01}.
+\label{eq:markov-two}
+\end{equation}
+例如，第一式要求在 $Y_{10}$ 相同的人中，$Y_{11}$ 的条件分布与 $Y_{00}$ 的取值无关。
+这里的顺序用于定义 Shapley 贡献，对应同一个体在不同暴露组合下的潜在结果。
+Markov 性是额外的跨潜在结果条件独立假设。
+
+\medskip
+\noindent{\headingweight 单步联合分布的识别。}
+设相邻组合的潜在结果为 $U,V\in\{0,\ldots,K\}$，满足 $0\le V-U\le1$。
+记 $F_U(r)=\mathrm{pr}(U\le r)$ 和 $F_V(r)=\mathrm{pr}(V\le r)$，约定 $F_U(-1)=0$。
+则
+\begin{equation}
+\begin{aligned}
+\mathrm{pr}(U=r,V=r+1)&=F_U(r)-F_V(r), &&0\le r<K,\\
+\mathrm{pr}(U=r,V=r)&=F_V(r)-F_U(r-1), &&0\le r\le K .
+\end{aligned}
+\label{eq:markov-edge}
+\end{equation}
+其余联合概率为零。第一式成立是因为 $U\le r<V$ 只可能发生在 $U=r,V=r+1$。
+第二式再由 $U$ 的边际概率相减得到。因此，单步联合分布由两个边际分布确定。
+这一结论见 Zhang、Geng、Li 和 Ding（2024）的 Lemma 1。\footnote{Zhang, C., Geng, Z., Li, W. and Ding, P. (2024).
+Identifying and bounding the probability of necessity for causes of effects with ordinal outcomes.
+arXiv:2411.01234.}
+
+将式~\eqref{eq:markov-edge} 用于四条单步路径，可恢复沿各条路径的两变量联合分布。
+再由第一条 Markov 条件，对 $\mathrm{pr}(Y_{10}=b)>0$，
+\begin{equation}
+\mathrm{pr}(Y_{00}=a,Y_{10}=b,Y_{11}=c)
+=
+\frac{\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+      \mathrm{pr}(Y_{10}=b,Y_{11}=c)}
+     {\mathrm{pr}(Y_{10}=b)} .
+\label{eq:markov-triple}
+\end{equation}
+对 $b$ 求和即可识别 $\mathrm{pr}(Y_{00},Y_{11})$。概率为零的 $b$ 对求和贡献为零。
+
+\clearpage
+\section*{二级病例责任的识别公式}
+四组结局分布通过式~\eqref{eq:markov-edge} 和~\eqref{eq:markov-triple} 给出
+$\mathrm E(Y_{00}\mid Y_{11}=2)$、$\mathrm E(Y_{10}\mid Y_{11}=2)$ 和
+$\mathrm E(Y_{01}\mid Y_{11}=2)$。于是
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+&=\tfrac12\{\mathrm E(Y_{10}\mid Y_{11}=2)-\mathrm E(Y_{00}\mid Y_{11}=2)
+             +2-\mathrm E(Y_{01}\mid Y_{11}=2)\},\\
+\mathcal R_2(\mathcal E_2)
+&=\tfrac12\{\mathrm E(Y_{01}\mid Y_{11}=2)-\mathrm E(Y_{00}\mid Y_{11}=2)
+             +2-\mathrm E(Y_{10}\mid Y_{11}=2)\},\\
+\mathcal R_\phi(\mathcal E_2)
+&=\mathrm E(Y_{00}\mid Y_{11}=2).
+\end{aligned}
+\label{eq:markov-two-means}
+\end{equation}
+这些量均可点识别，且三项之和为 $2$。
+
+对三级结局，可以将结果直接写成边际概率。
+沿用 $\xi_{ab}=\mathrm{pr}(Y_{ab}=2)$，为简写暂记
+$\theta=\mathrm{pr}(T=0112)$。
+在条件一之下，$T=0112$ 等价于 $Y_{00}=0,Y_{11}=2$，
+并且此时 $Y_{10}=Y_{01}=1$。由第一条 Markov 条件，
+\begin{equation}
+\theta
+=
+\frac{\{\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)\}
+      (\xi_{11}-\xi_{10})}
+     {\mathrm{pr}(Y_{10}=1)} .
+\label{eq:markov-theta}
+\end{equation}
+当 $\mathrm{pr}(Y_{10}=1)=0$ 时，$\theta=0$。由此得到
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+&=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\
+\mathcal R_2(\mathcal E_2)
+&=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\
+\mathcal R_\phi(\mathcal E_2)
+&=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
+\end{aligned}
+\label{eq:markov-two-closed}
+\end{equation}
+式~\eqref{eq:markov-theta} 将右侧最后一个未知类型概率写成可识别量。
+
+\medskip
+\noindent{\headingweight 数值例子。}
+取前文反例中的边际分布，$Y_{00}$ 各以 $1/2$ 概率取 $0,1$，
+$Y_{10}=Y_{01}=1$，$Y_{11}$ 各以 $1/2$ 概率取 $1,2$。
+此时 Markov 条件要求 $Y_{00}$ 与 $Y_{11}$ 独立，故
+\[
+\theta=\frac{(1/2-0)(1/2-0)}{1}=\frac14,
+\qquad
+(\mathcal R_1,\mathcal R_2,\mathcal R_\phi)(\mathcal E_2)
+=\left(\frac34,\frac34,\frac12\right).
+\]
+类型 $0111,0112,1111,1112$ 各占 $1/4$ 给出满足这些条件的联合分布。
+
+\medskip
+\noindent{\headingweight 两条路径的相容性。}
+沿 $Y_{01}$ 的第二条 Markov 条件也给出端点联合分布。
+两条路径必须对每个 $a,c$ 得到同一个 $\mathrm{pr}(Y_{00}=a,Y_{11}=c)$。
+特别地，当相应分母为正时，式~\eqref{eq:markov-theta} 中的 $10$ 全部换成 $01$ 应得到相同的 $\theta$。
+这些相等关系是可用边际分布检验的必要条件。对 $p=2$ 的责任识别，
+四条单步增量限制与其中一条 Markov 条件已经足够，条件二同时写出两条以对称地约束两种顺序。
+
+\clearpage
+\section*{任意 $p$ 个暴露的扩展}
+现在令 $Y\in\{0,\ldots,K\}$，$p$ 个暴露均为二元变量。
+用 $\mathbf x=(x_1,\ldots,x_p)$ 表示暴露组合，$Y_{\mathbf x}$ 为相应潜在结果，
+$T$ 表示全部 $2^p$ 个潜在结果。对任意正等级 $k$，定义
+\[
+\mathcal E_k=\{X_1=\cdots=X_p=1,Y=k\},\qquad
+\mathrm{pr}(Y_{\mathbf1}=k)>0.
+\]
+假设一致性成立，联合暴露与 $T$ 独立，且每种暴露组合出现的概率都为正。
+
+取一个加入顺序 $\sigma=(\sigma_1,\ldots,\sigma_p)$。
+用 $\mathbf x_m^\sigma$ 表示依次加入前 $m$ 个暴露后的组合，其余暴露取 $0$。
+记
+\[
+Z_m^\sigma=Y_{\mathbf x_m^\sigma},\qquad
+Z_0^\sigma=Y_{\mathbf0},\qquad Z_p^\sigma=Y_{\mathbf1}.
+\]
+这些符号始终表示原始结局的潜在结果。例如 $p=3$、顺序为 $(2,1,3)$ 时，
+\[
+(Z_0^\sigma,Z_1^\sigma,Z_2^\sigma,Z_3^\sigma)
+=(Y_{000},Y_{010},Y_{110},Y_{111}).
+\]
+
+\medskip
+\noindent{\headingweight 一般条件。}
+对每个加入顺序 $\sigma$，假设
+\begin{equation}
+\begin{aligned}
+0\le Z_m^\sigma-Z_{m-1}^\sigma\le1,\qquad &m=1,\ldots,p,\\
+\mathrm{pr}(Z_m^\sigma\mid Z_0^\sigma,\ldots,Z_{m-1}^\sigma)
+=\mathrm{pr}(Z_m^\sigma\mid Z_{m-1}^\sigma),\qquad &m=2,\ldots,p .
+\end{aligned}
+\label{eq:markov-p-assumptions}
+\end{equation}
+第二行只在条件事件概率为正时要求成立。每一步都可以依赖已加入的暴露组合和新加入暴露的身份。
+不同顺序或不同位置的转移概率可以不同。
+
+定义可由对应暴露组识别的分布函数与概率质量
+\[
+F_m^\sigma(r)=\mathrm{pr}(Y\le r\mid\mathbf X=\mathbf x_m^\sigma),
+\qquad
+f_m^\sigma(r)=F_m^\sigma(r)-F_m^\sigma(r-1),
+\]
+约定 $F_m^\sigma(-1)=0$。对 $f_{m-1}^\sigma(a)>0$，由单步联合分布得到转移矩阵
+\begin{equation}
+Q_m^\sigma(a,b)=
+\begin{cases}
+\displaystyle
+\frac{F_m^\sigma(a)-F_{m-1}^\sigma(a-1)}
+     {f_{m-1}^\sigma(a)}, & b=a,\\[7pt]
+\displaystyle
+\frac{F_{m-1}^\sigma(a)-F_m^\sigma(a)}
+     {f_{m-1}^\sigma(a)}, & b=a+1,\\[7pt]
+0, & \text{其余情形},
+\end{cases}
+\qquad a,b=0,\ldots,K.
+\label{eq:markov-Q}
+\end{equation}
+若 $f_{m-1}^\sigma(a)=0$，可将该行取为在 $a$ 处概率为 $1$ 的行向量，结果与此选择无关。
+在条件~\eqref{eq:markov-p-assumptions} 下，式~\eqref{eq:markov-Q} 中各项非负且每行和为 $1$。
+随机分配给出每个边际分布，单步增量限制给出 $Q_m^\sigma$，
+Markov 条件再给出整条路径的联合分布
+\begin{equation}
+\mathrm{pr}(Z_0^\sigma=z_0,\ldots,Z_p^\sigma=z_p)
+=f_0^\sigma(z_0)\prod_{m=1}^{p}Q_m^\sigma(z_{m-1},z_m).
+\label{eq:markov-path}
+\end{equation}
+
+\clearpage
+\section*{一般 $p$ 的条件平均 Shapley 值}
+记 $m_\sigma(j)$ 为暴露 $X_j$ 在顺序 $\sigma$ 中的位置。
+原始等级评分下，给定类型的贡献定义为
+\begin{equation}
+R(j\mid T,\mathcal E_k)
+=\frac1{p!}\sum_\sigma
+\left(Z_{m_\sigma(j)}^\sigma-Z_{m_\sigma(j)-1}^\sigma\right),
+\qquad
+R(\phi\mid T,\mathcal E_k)=Y_{\mathbf0}.
+\label{eq:markov-p-shapley}
+\end{equation}
+对任一满足 $Y_{\mathbf1}=k$ 的类型，各暴露与背景之和为 $k$。
+用病例中的条件类型概率加权，即得
+\[
+\mathcal R_j(\mathcal E_k)
+=\mathrm E\{R(j\mid T,\mathcal E_k)\mid\mathcal E_k\}.
+\]
+联合随机分配将这里的条件事件化为 $Y_{\mathbf1}=k$。
+
+\medskip
+\noindent{\headingweight 命题。}
+在一致性、联合随机分配、正值性和条件~\eqref{eq:markov-p-assumptions} 下，
+对任意 $p,K$ 及发生概率为正的 $\mathcal E_k$，
+所有暴露和背景的条件平均责任都可点识别。
+
+为给出可直接计算的公式，对顺序 $\sigma$ 令 $m=m_\sigma(j)$，并记
+\[
+H_m^\sigma=Q_{m+1}^\sigma\cdots Q_p^\sigma,\qquad H_p^\sigma=I.
+\]
+$H_m^\sigma(b,k)$ 表示沿这条路径从第 $m$ 步的 $b$ 级到最终 $k$ 级的条件概率。
+则
+\begin{equation}
+\mathcal R_j(\mathcal E_k)
+=
+\frac{
+ \displaystyle\sum_\sigma\sum_{r=0}^{K-1}
+ \{F_{m-1}^\sigma(r)-F_m^\sigma(r)\}
+ H_m^\sigma(r+1,k)}
+ {p!\,\mathrm{pr}(Y_{\mathbf1}=k)} .
+\label{eq:markov-p-identification}
+\end{equation}
+背景的识别公式可沿任一顺序 $\sigma$ 写为
+\begin{equation}
+\mathcal R_\phi(\mathcal E_k)
+=
+\frac{\displaystyle\sum_{a=0}^{K}
+ a f_0^\sigma(a)\big[Q_1^\sigma\cdots Q_p^\sigma\big](a,k)}
+ {\mathrm{pr}(Y_{\mathbf1}=k)}.
+\label{eq:markov-background}
+\end{equation}
+分母可由全暴露组中 $Y=k$ 的比例识别。
+
+\medskip
+\noindent{\headingweight 证明。}
+在第 $m$ 步，贡献为 $1$ 恰好对应某个 $r\to r+1$ 的转移。
+该转移的联合概率为 $F_{m-1}^\sigma(r)-F_m^\sigma(r)$。
+Markov 条件允许将其乘以 $H_m^\sigma(r+1,k)$，得到这次升级与最终 $Y_{\mathbf1}=k$ 同时发生的概率。
+对 $r$ 求和、除以病例概率，再对 $p!$ 种顺序取平均，即为式~\eqref{eq:markov-p-identification}。
+背景公式由端点联合分布直接得到。对每条路径，所有步的增量之和为 $Z_p^\sigma-Z_0^\sigma$，所以
+\[
+\mathcal R_\phi(\mathcal E_k)+\sum_{j=1}^{p}\mathcal R_j(\mathcal E_k)=k.
+\]
+
+\medskip
+\noindent{\headingweight 共同相容性与模型含义。}
+条件~\eqref{eq:markov-p-assumptions} 是对同一个 $T$ 的联合分布施加的条件。
+两条路径如包含相同的潜在结果，它们通过式~\eqref{eq:markov-path} 计算的共同边际分布必须一致。
+这是模型的必要限制。识别公式以存在满足全部条件的联合分布为前提。
+单步联合分布的识别依据式~\eqref{eq:markov-edge}，
+整条路径和 Shapley 责任的识别还使用了本文明确增加的 Markov 条件。
+
+这些条件允许任意 $p$ 下的非零升级。例如，设 $B,D_1,\ldots,D_p$ 相互独立。
+其中 $B$ 取值于 $\{0,\ldots,K\}$，每个 $D_j$ 取值于 $\{0,1\}$。定义
+\[
+Y_{\mathbf x}=\min\!\left\{K,\ B+\sum_{j=1}^{p}x_jD_j\right\}.
+\]
+每加入一个暴露最多升一级。给定当前等级，下一步由新加入暴露的 $D_j$ 决定，
+达到 $K$ 后保持在 $K$。因此每条路径都满足上述 Markov 条件。
+这个模型给出了条件可共同成立的例子，多个暴露合起来可以使结局升高多个等级。
 
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
