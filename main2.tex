@@ -187,5 +187,54 @@ $\tfrac32\mathrm{pr}(T=1123\mid\mathcal E_3)$。由于每个类型的背景责�
 若四种暴露组合均以正概率随机分配，各 $\xi_{ab}$ 可由相应组中三级结局的比例识别。
 仅凭各组的结局分布，一般无法确定 $\nu_{00}$ 和 $\nu_{10}-\nu_{01}$，故两个暴露的平均责任一般不能点识别。
 
+\clearpage
+\section*{二级病例中的总责任}
+设 $\mathrm{pr}(\mathcal E_2)>0$。由一致性，$\mathcal E_2$ 下有 $Y_{11}=2$。
+在单调性下，二级病例只可能属于表中的五种类型，即 $1112$、$1122$、$1212$、$1222$ 和 $2222$。
+记 $w_t=\mathrm{pr}(T=t\mid\mathcal E_2)$。依次读取表中两列暴露责任和背景责任，得到
+\[
+\begin{aligned}
+ \mathcal R_1(\mathcal E_2)&=w_{1122}+\tfrac12(w_{1112}+w_{1222}),\\
+ \mathcal R_2(\mathcal E_2)&=w_{1212}+\tfrac12(w_{1112}+w_{1222}),\\
+ \mathcal R_\phi(\mathcal E_2)&=1+w_{2222}.
+\end{aligned}
+\]
+最后一式来自背景责任 $Y_{00}$。类型 $2222$ 的背景为 $2$ 分，其余四种类型均为 $1$ 分。
+
+为写成概率展开，令 $\eta_{ab}=\mathrm{pr}(Y_{ab}=2)$，沿用
+$\nu_{ab}=\mathrm{pr}(Y_{ab}=2,Y_{11}=3)$。由单调性，当 $Y_{ab}=2$ 时，
+$Y_{11}$ 只能是 $2$ 或 $3$。因此对 $ab=00,01,10$，
+\[
+\begin{aligned}
+ \mathrm{pr}(Y_{ab}=2,Y_{11}=2)&=\eta_{ab}-\nu_{ab},\\
+ \mathrm E\!\left[Y_{ab}\mathbf{1}\{Y_{11}=2\}\right]
+ &=\eta_{11}+\eta_{ab}-\nu_{ab}.
+\end{aligned}
+\]
+第二个等式利用了二级病例中 $Y_{ab}$ 只取 $1,2$。
+当联合暴露 $(X_1,X_2)$ 与 $T$ 独立时，将上式代入 Shapley 公式，得到
+\[
+\begin{aligned}
+ \mathcal R_1(\mathcal E_2)
+ &=\frac{\eta_{11}+\eta_{10}-\eta_{00}-\eta_{01}-\nu_{10}+\nu_{00}+\nu_{01}}{2\eta_{11}},\\[3pt]
+ \mathcal R_2(\mathcal E_2)
+ &=\frac{\eta_{11}+\eta_{01}-\eta_{00}-\eta_{10}-\nu_{01}+\nu_{00}+\nu_{10}}{2\eta_{11}},\\[3pt]
+ \mathcal R_\phi(\mathcal E_2)&=1+\frac{\eta_{00}-\nu_{00}}{\eta_{11}} .
+\end{aligned}
+\]
+三项责任之和为 $2$。二级与三级责任涉及相同的联合概率 $\nu_{00},\nu_{01},\nu_{10}$。
+它们在两个等级相应的暴露责任分子中符号相反。即使随机分配暴露，单独考察二级病例时，
+各项平均责任一般仍不能点识别。
+
+\section*{一级病例中的总责任}
+设 $\mathrm{pr}(\mathcal E_1)>0$。此时 $Y_{11}=1$。由单调性，四个潜在等级均为 $1$，
+故一级病例均为类型 $1111$。两个暴露在任一加入顺序下的等级增量均为 $0$，背景为 $1$ 分。因此
+\[
+ \mathcal R_1(\mathcal E_1)=0,\qquad
+ \mathcal R_2(\mathcal E_1)=0,\qquad
+ \mathcal R_\phi(\mathcal E_1)=1 .
+\]
+一级病例的分配由一致性与单调性直接确定。
+
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
