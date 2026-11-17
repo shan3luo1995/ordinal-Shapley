@@ -49,14 +49,14 @@
 每升一级计 $1$ 分；这里分配的是等级分数。四个潜在结果的含义为
 \begin{center}
 \renewcommand{\arraystretch}{1.17}
-\begin{tabular}{@{}c c c@{}}
+\begin{tabular}{@{}c c l@{}}
 \toprule
-暴露组合 $(X_1,X_2)$ & 潜在结果 & 集合记号\\
+暴露组合 $(X_1,X_2)$ & 潜在结果 & 含义\\
 \midrule
-$(0,0)$ & $Y_{00}$ & $Y(\varnothing)$\\
-$(1,0)$ & $Y_{10}$ & $Y(\{1\})$\\
-$(0,1)$ & $Y_{01}$ & $Y(\{2\})$\\
-$(1,1)$ & $Y_{11}$ & $Y(\{1,2\})$\\
+$(0,0)$ & $Y_{00}$ & 两个暴露均不存在\\
+$(0,1)$ & $Y_{01}$ & 只有暴露 $X_2$\\
+$(1,0)$ & $Y_{10}$ & 只有暴露 $X_1$\\
+$(1,1)$ & $Y_{11}$ & 两个暴露均存在\\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -84,12 +84,12 @@ Shapley 规则对两种加入顺序各取一半权重。
 \bottomrule
 \end{tabular}
 \end{center}
-对给定 $T=t$，将各潜在结果取为 $t$ 中对应的值，定义
+用编号 $0$ 表示无暴露背景。对给定 $T=t$，将各潜在结果取为 $t$ 中对应的值，定义
 \begin{equation}
 \begin{aligned}
 R(1\mid t,\mathcal E_2)&=\tfrac12\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\},\\
 R(2\mid t,\mathcal E_2)&=\tfrac12\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\},\\
-R(\varnothing\mid t,\mathcal E_2)&=Y_{00}.
+R(0\mid t,\mathcal E_2)&=Y_{00}.
 \end{aligned}
 \label{eq:individual}
 \end{equation}
@@ -97,7 +97,7 @@ R(\varnothing\mid t,\mathcal E_2)&=Y_{00}.
 
 \medskip
 \noindent{\headingweight 病例中的平均责任。}
-例如，对 $j=1,2,\varnothing$，
+例如，对 $j=0,1,2$，
 \[
 \mathcal R_j(\mathcal E_2)
 =\sum_{t:\,t_{11}=2}R(j\mid t,\mathcal E_2)\,
@@ -141,36 +141,34 @@ Y_{11}\indep Y_{00}\mid Y_{01},&\qquad
 第二条将 $Y_{10}$ 换成 $Y_{01}$。这些是跨潜在结果的额外假设，随机分配本身不蕴含它们。
 路径表示计算 Shapley 值时的加入顺序，不表示实际随访时间。
 
-集合条件 $Y(S\cup\{j\})\indep Y(A)\mid Y(S)$ 在 $p=2$ 时恰好给出式~\eqref{eq:markov}：
-取 $A=\varnothing$，再分别取 $(S,j)=(\{1\},2)$ 和 $(\{2\},1)$。
-此时每条路径只有三个潜在结果，所以条件独立就是该路径的 Markov 条件。
+两条路径均只有起始、中间和最终三个潜在结果，因此式~\eqref{eq:markov} 就是相应路径的 Markov 条件。
 
 \section{第一步：恢复相邻两个潜在结果的联合分布}
-设 $U,V\in\{0,1,2\}$ 满足 $0\le V-U\le1$。
-联合取值只可能是 $(0,0),(0,1),(1,1),(1,2),(2,2)$。
-五个联合概率都由 $U,V$ 各自的分布确定：
+以 $Y_{00}$ 与 $Y_{10}$ 为例。条件 $0\le Y_{10}-Y_{00}\le1$ 限制了二者的联合取值。
+下表列出全部五种可能，其概率均由这两个潜在结果各自的分布确定：
 \begin{center}
-\renewcommand{\arraystretch}{1.40}
-\setlength{\tabcolsep}{8pt}
-\begin{tabular}{@{}c c c c@{}}
+\renewcommand{\arraystretch}{1.35}
+\setlength{\tabcolsep}{12pt}
+\begin{tabular}{@{}c l@{}}
 \toprule
- & $V=0$ & $V=1$ & $V=2$\\
+$(Y_{00},Y_{10})$ 的取值 & 对应的联合概率\\
 \midrule
-$U=0$ & $\mathrm{pr}(V=0)$
- & $\mathrm{pr}(U=0)-\mathrm{pr}(V=0)$ & $0$\\
-$U=1$ & $0$
- & $1-\mathrm{pr}(V=2)-\mathrm{pr}(U=0)$
- & $\mathrm{pr}(V=2)-\mathrm{pr}(U=2)$\\
-$U=2$ & $0$ & $0$ & $\mathrm{pr}(U=2)$\\
+$(0,0)$ & $\mathrm{pr}(Y_{10}=0)$\\
+$(0,1)$ & $\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)$\\
+$(1,1)$ & $1-\mathrm{pr}(Y_{10}=2)-\mathrm{pr}(Y_{00}=0)$\\
+$(1,2)$ & $\mathrm{pr}(Y_{10}=2)-\mathrm{pr}(Y_{00}=2)$\\
+$(2,2)$ & $\mathrm{pr}(Y_{00}=2)$\\
 \bottomrule
 \end{tabular}
 \end{center}
-例如，$U=0$ 的人只能停在 $0$ 或升至 $1$；其中停在 $0$ 的概率就是 $\mathrm{pr}(V=0)$，
-相减便得到从 $0$ 升至 $1$ 的概率。从 $1$ 升至 $2$ 的概率同理。
+例如，$Y_{00}=0$ 的人加入 $X_1$ 后只能停在 $0$ 或升至 $1$。
+其中停在 $0$ 的概率就是 $\mathrm{pr}(Y_{10}=0)$，
+因此从 $0$ 升至 $1$ 的概率为 $\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)$。
+从 $1$ 升至 $2$ 的概率同理。
 
-将表分别用于 $(Y_{00},Y_{10})$、$(Y_{10},Y_{11})$、$(Y_{00},Y_{01})$、
-$(Y_{01},Y_{11})$，便恢复四对相邻联合分布。
-各潜在结果的边际概率由相应随机暴露组的结局比例识别。
+同样的计算分别用于 $(Y_{10},Y_{11})$、$(Y_{00},Y_{01})$ 和 $(Y_{01},Y_{11})$，
+便恢复其余三对相邻联合分布。
+四个潜在结果的边际概率由相应随机暴露组的结局比例识别。
 
 \clearpage
 \section{第二步：恢复无暴露与双暴露的联合分布}
@@ -206,9 +204,13 @@ $(Y_{01},Y_{11})$，便恢复四对相邻联合分布。
 \noindent{\headingweight 对二级病例，最关键的是从 $0$ 到 $2$ 的概率。}
 记
 \[
-\xi_{ab}=\mathrm{pr}(Y_{ab}=2),\qquad
-\theta=\mathrm{pr}(Y_{00}=0,Y_{11}=2).
+\begin{aligned}
+\xi_{00}&=\mathrm{pr}(Y_{00}=2),&\qquad \xi_{01}&=\mathrm{pr}(Y_{01}=2),\\
+\xi_{10}&=\mathrm{pr}(Y_{10}=2),&\qquad \xi_{11}&=\mathrm{pr}(Y_{11}=2),
+\end{aligned}
 \]
+以及 $\theta=\mathrm{pr}(Y_{00}=0,Y_{11}=2)$。
+
 在条件~\eqref{eq:unit} 下，$Y_{00}=0,Y_{11}=2$ 强制两条路径的中间值均为 $1$，因此
 \[
 \{Y_{00}=0,Y_{11}=2\}=\{T=0112\}.
@@ -249,7 +251,7 @@ $(Y_{01},Y_{11})$，便恢复四对相邻联合分布。
 \begin{tabular}{@{}c c c c@{}}
 \toprule
 类型 $t$ & $R(1\mid t,\mathcal E_2)$ & $R(2\mid t,\mathcal E_2)$
- & $R(\varnothing\mid t,\mathcal E_2)$\\
+ & $R(0\mid t,\mathcal E_2)$\\
 \midrule
 $0112$ & $1$ & $1$ & $0$\\
 $1112$ & $1/2$ & $1/2$ & $1$\\
@@ -294,12 +296,12 @@ $2222$ & $0$ & $0$ & $2$\\
  &=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
 \mathcal R_2(\mathcal E_2)
  &=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
-\mathcal R_{\varnothing}(\mathcal E_2)
+\mathcal R_{0}(\mathcal E_2)
  &=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
 \end{aligned}
 \label{eq:result}
 \end{equation}
-这三项均可点识别，合计为 $2$。其中 $\xi_{ab}$ 直接来自各组的二级结局比例，
+这三项均可点识别，合计为 $2$。其中四个 $\xi$ 概率直接来自各组的二级结局比例，
 $\theta$ 由式~\eqref{eq:theta} 识别。证明不要求先识别每一种类型的条件概率。
 
 \clearpage
@@ -330,7 +332,7 @@ $(1,1)$ & $0$ & $1/2$ & $1/2$\\
 \begin{aligned}
 \mathcal R_1(\mathcal E_2)&=\frac{1/2+1/4}{2(1/2)}=\frac34,\\
 \mathcal R_2(\mathcal E_2)&=\frac{1/2+1/4}{2(1/2)}=\frac34,\\
-\mathcal R_{\varnothing}(\mathcal E_2)&=\frac{1/2-1/4}{1/2}=\frac12.
+\mathcal R_{0}(\mathcal E_2)&=\frac{1/2-1/4}{1/2}=\frac12.
 \end{aligned}
 \]
 即二级病例的 $2$ 分中，两个暴露各贡献 $0.75$ 分，背景贡献 $0.5$ 分。
