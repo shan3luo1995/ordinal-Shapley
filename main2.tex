@@ -50,8 +50,17 @@ $Y_{00}=1,\ Y_{01}=1,\ Y_{10}=2,\ Y_{11}=3$。
 记 $\mathcal E_k=(X_1=1,X_2=1,Y=k)$。由一致性，在 $\mathcal E_3$ 下有 $Y_{11}=3$。
 每升一个等级计 $1$ 分。对给定类型 $t$，用 $R(j\mid t,\mathcal E_3)$ 表示暴露 $X_j$
 对结局从 $Y_{00}$ 升至三级的 Shapley 贡献，单位为分。
-
-
+给定类型 $t$，四个潜在结果取该类型的值，即 $Y_{ab}=t_{ab}$。两个暴露的 Shapley 公式为
+\[
+\begin{aligned}
+ R(1\mid t,\mathcal E_3)
+   &=\tfrac12\big[(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\big],\\
+ R(2\mid t,\mathcal E_3)
+   &=\tfrac12\big[(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\big].
+\end{aligned}
+\]
+每一行的第一项是该暴露先加入时的等级增量，第二项是它后加入时的等级增量。
+两种顺序各占一半。两个暴露的贡献之和为 $Y_{11}-Y_{00}=3-Y_{00}$。
 
 \section{三个例子}
 \noindent{\headingweight 类型 $1123$（观测到三级）。}
@@ -132,15 +141,6 @@ $1111$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ \\
 \bottomrule
 \end{tabular}
 \end{center}
-
-例如，在 $\mathcal E_3$ 下，对满足 $t_{11}=3$ 的每个类型，两个暴露的责任为
-\[
-\begin{aligned}
- R(1\mid t,\mathcal E_3)&=\tfrac12\big[(t_{10}-t_{00})+(t_{11}-t_{01})\big],\\
- R(2\mid t,\mathcal E_3)&=\tfrac12\big[(t_{01}-t_{00})+(t_{11}-t_{10})\big].
-\end{aligned}
-\]
-两式相加可得 $R(1\mid t,\mathcal E_3)+R(2\mid t,\mathcal E_3)=t_{11}-t_{00}$，即从无暴露到双暴露增加的总分。
 
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
