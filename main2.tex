@@ -1,0 +1,189 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath,booktabs}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
+\pagestyle{plain}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\bfseries}}
+\makeatother
+
+\begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
+\begin{center}
+  {\LARGE\bfseries 三级有序结局下 Shapley 增量的逐型验证}
+\end{center}
+
+设两个暴露均为二元变量，四个潜在结果\,$Y_{00},Y_{01},Y_{10},Y_{11}$\,均取\,$0,1,2$。以这三个数字作为等级评分，并假设两个暴露均不会降低评分，即
+\[
+  Y_{00}\le Y_{01}\le Y_{11},\qquad Y_{00}\le Y_{10}\le Y_{11}.
+\]
+记\,$T=(Y_{00},Y_{01},Y_{10},Y_{11})$。上述单调性条件给出 20 种可行类型。例如，$0012$\,表示\,$(0,0,1,2)$。
+
+这里的“逐型代入”（literal check）\footnote{原稿中单独出现的“5”是页码。}指固定一个类型\,$t$，将它的四个数代入所有\,$A_u$，再分别计算\,$L_1(t)$\,和\,$L_2(t)$。
+
+\section{为什么只有一个指标等于 1}
+定义三个多项式
+\[
+ q_0(y)=\frac{(1-y)(2-y)}{2},\qquad
+ q_1(y)=y(2-y),\qquad
+ q_2(y)=\frac{y(y-1)}{2}.
+\]
+分别代入三个等级，直接得到
+\[
+ \begin{array}{c|ccc}
+    y&q_0(y)&q_1(y)&q_2(y)\\ \hline
+    0&1&0&0\\ 1&0&1&0\\ 2&0&0&1
+ \end{array}
+ \qquad\text{即}\qquad q_k(y)=\mathbf{1}(y=k).
+\]
+对每个可行类型\,$u=(u_{00},u_{01},u_{10},u_{11})$，令
+\begin{equation}\label{eq:indicator}
+ A_u=q_{u_{00}}(Y_{00})\,q_{u_{01}}(Y_{01})\,q_{u_{10}}(Y_{10})\,q_{u_{11}}(Y_{11}).
+\end{equation}
+固定\,$T=t$\,后，若\,$u=t$，四个因子均为 1。若\,$u\ne t$，至少一个位置不同，对应因子为 0。因此\,$A_u=\mathbf{1}(T=u)$。在任一给定类型上，20 个指标恰有一个等于 1。
+
+\section{从指标计算两个贡献}
+将各类型的系数按大小合并，待核对的两个多项式可完整写为
+\begin{align}
+ L_1={}&\tfrac12(A_{0001}+A_{0102}+A_{0111}+A_{0212}+A_{1112}+A_{1222}) \notag\\
+      &+(A_{0002}+A_{0011}+A_{0112}+A_{0222}+A_{1122})
+        +\tfrac32(A_{0012}+A_{0122})+2A_{0022},\label{eq:L1}\\[3pt]
+ L_2={}&\tfrac12(A_{0001}+A_{0012}+A_{0111}+A_{0122}+A_{1112}+A_{1222}) \notag\\
+      &+(A_{0002}+A_{0101}+A_{0112}+A_{0222}+A_{1212})
+        +\tfrac32(A_{0102}+A_{0212})+2A_{0202}.\label{eq:L2}
+\end{align}
+于是\,$L_j(t)$\,就是\,$A_t$\,在相应多项式中的系数。若该项未出现，其系数为 0。对照计算时，从无暴露开始。若先加入\,$X_1$，它带来的增量为\,$t_{10}-t_{00}$。若后加入\,$X_1$，增量为\,$t_{11}-t_{01}$。对这两种顺序各取一半权重，即得\,$X_1$\,的 Shapley 增量。对\,$X_2$\,同理。
+
+\clearpage
+\section{三个类型的直接代入}
+
+\noindent\textbf{类型\,$0001$。}
+代入\,$(Y_{00},Y_{01},Y_{10},Y_{11})=(0,0,0,1)$，式~\eqref{eq:indicator} 给出
+\begin{align*}
+ A_{0001}
+ &=\tfrac18(1-Y_{00})(2-Y_{00})(1-Y_{01})(2-Y_{01})
+               (1-Y_{10})(2-Y_{10})Y_{11}(2-Y_{11})\\
+ &=\tfrac18(1)(2)(1)(2)(1)(2)(1)(1)=1 .
+\end{align*}
+其余 19 个指标均为 0。例如，$A_{0002}$\,只在最后一位与该类型不同，故
+\[
+ A_{0002}=\tfrac1{16}(1)(2)(1)(2)(1)(2)\underbrace{1(1-1)}_{0}=0.
+\]
+式~\eqref{eq:L1} 和式~\eqref{eq:L2} 中均只剩\,$\tfrac12 A_{0001}$。与直接计算的增量对照可得
+\[
+ \begin{aligned}
+ L_1(0001)&=\tfrac12=\tfrac12\big[(0-0)+(1-0)\big],\\
+ L_2(0001)&=\tfrac12=\tfrac12\big[(0-0)+(1-0)\big].
+ \end{aligned}
+\]
+
+\medskip
+\noindent\textbf{类型\,$0012$。}
+代入\,$(0,0,1,2)$，得到
+\begin{align*}
+ A_{0012}
+ &=\tfrac18(1-Y_{00})(2-Y_{00})(1-Y_{01})(2-Y_{01})
+        Y_{10}(2-Y_{10})Y_{11}(Y_{11}-1)\\
+ &=\tfrac18(1)(2)(1)(2)(1)(1)(2)(1)=1 .
+\end{align*}
+其余指标均为 0。$A_{0012}$\,在两个多项式中的系数分别为\,$3/2$\,和\,$1/2$，按两种加入顺序计算，结果也相同。
+\[
+ \begin{aligned}
+ L_1(0012)&=\tfrac32 A_{0012}=\tfrac32=\tfrac12\big[(1-0)+(2-0)\big],\\
+ L_2(0012)&=\tfrac12 A_{0012}=\tfrac12=\tfrac12\big[(0-0)+(2-1)\big].
+ \end{aligned}
+\]
+
+\medskip
+\noindent\textbf{类型\,$0202$。}
+代入\,$(0,2,0,2)$，得到
+\begin{align*}
+ A_{0202}
+ &=\tfrac1{16}(1-Y_{00})(2-Y_{00})Y_{01}(Y_{01}-1)
+              (1-Y_{10})(2-Y_{10})Y_{11}(Y_{11}-1)\\
+ &=\tfrac1{16}(1)(2)(2)(1)(1)(2)(2)(1)=1 .
+\end{align*}
+其余指标均为 0。$A_{0202}$\,在\,$L_1$\,中的系数为 0，在\,$L_2$\,中的系数为 2。因此
+\[
+ \begin{aligned}
+ L_1(0202)&=0=\tfrac12\big[(0-0)+(2-2)\big],\\
+ L_2(0202)&=2A_{0202}=2=\tfrac12\big[(2-0)+(2-0)\big].
+ \end{aligned}
+\]
+
+\clearpage
+\section{全部 20 种类型的逐行核对}
+表中每行固定同一个\,$t$。对每个暴露，第一列由式~\eqref{eq:L1} 或式~\eqref{eq:L2} 代入 20 个指标得到，第二列直接由该行的四个潜在结果计算。
+
+\begin{center}
+\renewcommand{\arraystretch}{1.23}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}c cc cc@{}}
+\toprule
+ & \multicolumn{2}{c}{暴露\,$X_1$} & \multicolumn{2}{c}{暴露\,$X_2$}\\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+$t$ & $L_1(t)$ & $\tfrac12[(t_{10}-t_{00})+(t_{11}-t_{01})]$
+    & $L_2(t)$ & $\tfrac12[(t_{01}-t_{00})+(t_{11}-t_{10})]$\\
+\midrule
+$0000$ & $0$ & $0$ & $0$ & $0$ \\
+$0001$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ \\
+$0002$ & $1$ & $1$ & $1$ & $1$ \\
+$0011$ & $1$ & $1$ & $0$ & $0$ \\
+$0012$ & $3/2$ & $3/2$ & $1/2$ & $1/2$ \\
+$0022$ & $2$ & $2$ & $0$ & $0$ \\
+$0101$ & $0$ & $0$ & $1$ & $1$ \\
+$0102$ & $1/2$ & $1/2$ & $3/2$ & $3/2$ \\
+$0111$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ \\
+$0112$ & $1$ & $1$ & $1$ & $1$ \\
+$0122$ & $3/2$ & $3/2$ & $1/2$ & $1/2$ \\
+$0202$ & $0$ & $0$ & $2$ & $2$ \\
+$0212$ & $1/2$ & $1/2$ & $3/2$ & $3/2$ \\
+$0222$ & $1$ & $1$ & $1$ & $1$ \\
+\addlinespace[3pt]
+$1111$ & $0$ & $0$ & $0$ & $0$ \\
+$1112$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ \\
+$1122$ & $1$ & $1$ & $0$ & $0$ \\
+$1212$ & $0$ & $0$ & $1$ & $1$ \\
+$1222$ & $1/2$ & $1/2$ & $1/2$ & $1/2$ \\
+\addlinespace[3pt]
+$2222$ & $0$ & $0$ & $0$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+因此，对每一个可行类型\,$t$，均有
+\begin{equation}\label{eq:identity}
+\begin{aligned}
+ L_1(t)&=\tfrac12\big[(t_{10}-t_{00})+(t_{11}-t_{01})\big],\\
+ L_2(t)&=\tfrac12\big[(t_{01}-t_{00})+(t_{11}-t_{10})\big].
+\end{aligned}
+\end{equation}
+式~\eqref{eq:identity} 在给定类型时已经成立，整个核对过程无需对类型分布取期望。两个贡献之和为\,$t_{11}-t_{00}$，即从无暴露到双暴露的等级分变化。
+\ifPDFTeX\end{CJK*}\fi
+\end{document}
