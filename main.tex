@@ -1,0 +1,83 @@
+% !TeX program = xelatex
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=19mm]{geometry}
+\usepackage[no-math]{fontspec}
+\usepackage{amsmath,booktabs,array,xcolor}
+\IfFontExistsTF{Noto Serif CJK SC}{
+  \setmainfont{Noto Serif CJK SC}
+  \setsansfont{Noto Sans CJK SC}
+}{
+  \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+  \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 0.5pt
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\abovedisplayskip}{4pt}
+\setlength{\belowdisplayskip}{4pt}
+\setlength{\abovedisplayshortskip}{3pt}
+\setlength{\belowdisplayshortskip}{3pt}
+\definecolor{accent}{HTML}{24545C}
+\newcommand{\heading}[1]{\par\vspace{5pt}{\sffamily\bfseries\color{accent}#1}\par}
+% 四列潜在结局依次为 Y00, Y01, Y10, Y11。右三列为同一类型的责任记号。
+\newcommand{\typerow}[4]{%
+  $#1$ & $#2$ & $#3$ & $#4$ &
+  $r_1(#1,#2,#3,#4)$ & $r_2(#1,#2,#3,#4)$ & $r_0(#1,#2,#3,#4)$ \\}
+\begin{document}
+{\sffamily\bfseries\LARGE 双暴露下 3 级结局的因果责任}\par\vspace{3pt}
+设 $Y\in\{1,2,3\}$，3 级最严重。观测到 $E=\{X_1=1,X_2=1,Y=3\}$。
+记 $Y_{ab}$ 为将 $(X_1,X_2)$ 设为 $(a,b)$ 时的潜在结局。由一致性，$Y_{11}=3$。
+假设两种暴露均不会减轻结局，即 $Y_{00}\le Y_{01}\le Y_{11}$ 且 $Y_{00}\le Y_{10}\le Y_{11}$。
+
+\heading{反事实类型及其责任份额}
+\begin{center}
+\renewcommand{\arraystretch}{1.30}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}ccccccc@{}}
+\toprule
+$Y_{00}$ & $Y_{01}$ & $Y_{10}$ & $Y_{11}$ &
+$X_1$ 的责任 & $X_2$ 的责任 & 背景责任 \\
+\midrule
+\typerow{1}{1}{1}{3}
+\typerow{1}{1}{2}{3}
+\typerow{1}{1}{3}{3}
+\typerow{1}{2}{1}{3}
+\typerow{1}{2}{2}{3}
+\typerow{1}{2}{3}{3}
+\typerow{1}{3}{1}{3}
+\typerow{1}{3}{2}{3}
+\typerow{1}{3}{3}{3}
+\midrule
+\typerow{2}{2}{2}{3}
+\typerow{2}{2}{3}{3}
+\typerow{2}{3}{2}{3}
+\typerow{2}{3}{3}{3}
+\midrule
+\typerow{3}{3}{3}{3}
+\bottomrule
+\end{tabular*}
+\end{center}
+
+\heading{责任的定义}
+记 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$，表中 14 个类型构成集合 $\mathcal T_3$。
+对 $t\in\mathcal T_3$，$r_1(t),r_2(t),r_0(t)$ 分别为 $X_1$、$X_2$ 和背景的责任份额。
+三者均非负，且 $r_1(t)+r_2(t)+r_0(t)=1$。在观测到 $E$ 的人群中，平均责任为
+\[
+ R_j(E)=\sum_{t\in\mathcal T_3}r_j(t)\Pr(T=t\mid E),\qquad j\in\{0,1,2\}.
+\]
+
+\heading{用 Shapley 值定义 $X_1$ 的责任}
+对给定类型 $t=(y_{00},y_{01},y_{10},3)$，令 $b_{ab}=\mathbf{1}\{y_{ab}=3\}$，故 $b_{11}=1$。
+取无暴露为基准，暴露组合 $(a,b)$ 的价值为 $v_t(a,b)=b_{ab}-b_{00}$。当 $X_1$ 先加入时，其边际贡献为 $b_{10}-b_{00}$。当 $X_1$ 在 $X_2$ 之后加入时，其边际贡献为 $b_{11}-b_{01}$。两种顺序各占一半，得到
+\[
+ r_1^{\mathrm{Sh}}(t)
+ =\tfrac12(b_{10}-b_{00})+\tfrac12(b_{11}-b_{01})
+ =\tfrac12\bigl[\mathbf{1}\{y_{10}=3\}-\mathbf{1}\{y_{00}=3\}+1-\mathbf{1}\{y_{01}=3\}\bigr].
+\]
+采用这一规则时，取 $r_1(t)=r_1^{\mathrm{Sh}}(t)$，并将无暴露时已有的份额 $b_{00}$ 归于背景。
+例如，$t=(1,3,3,3)$ 时，$X_1$ 先加入使结局从 1 级升至 3 级，后加入时结局已是 3 级，故 $r_1(t)=(1+0)/2=1/2$。
+
+\vfill
+{\footnotesize\color{accent} 参考文献\quad Luo, Deng, Zhao \& Geng (2026). arXiv:2606.18459.}
+\end{document}
