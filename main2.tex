@@ -115,43 +115,53 @@ $k$ & $t$
 
 \clearpage
 \section*{相容类型的加权平均}
-对 $\mathrm{pr}(\mathcal E_k)>0$ 的观测组，记 $\pi_t=\mathrm{pr}(T=t\mid\mathcal E_k)$，
-其中 $k=t_{11}$ 由类型的末位确定。在每个等级内，相容类型的 $\pi_t$ 之和为 $1$。
-用这些概率对表中同一组的各行加权。对 $j\in\{1,2,\phi\}$，
+设 $\mathrm{pr}(\mathcal E_k)>0$。在观测组 $\mathcal E_k$ 内，每个相容类型 $t$ 的权重为
+$\mathrm{pr}(T=t\mid\mathcal E_k)$。这些条件概率在该组内之和为 $1$。对 $j\in\{1,2,\phi\}$，
 \[
  \mathcal R_j(\mathcal E_k)
- =\sum_{t\text{ 与 }\mathcal E_k\text{ 相容}} R(j\mid t,\mathcal E_k)\,\pi_t .
+ =\sum_{t\text{ 与 }\mathcal E_k\text{ 相容}}
+    R(j\mid t,\mathcal E_k)\,\mathrm{pr}(T=t\mid\mathcal E_k).
 \]
 
-\noindent{\headingweight 一级。} 只有 $1111$，所以 $\pi_{1111}=1$，责任全部分给背景。
+\noindent{\headingweight 一级。} 此时 $Y_{11}=1$，而单调性要求其他三个潜在等级均不超过 $Y_{11}$。
+一级已是最低等级，故 $\mathrm{pr}(T=1111\mid\mathcal E_1)=1$。由表可得
 \[
  \mathcal R_1(\mathcal E_1)=0,\qquad \mathcal R_2(\mathcal E_1)=0,\qquad
  \mathcal R_\phi(\mathcal E_1)=1 .
 \]
 
-\noindent{\headingweight 二级。} 按表中二级的五行分别加权，得到
+\noindent{\headingweight 二级。} 若 $Y_{00}=1$，则 $Y_{01}$ 和 $Y_{10}$ 各可取 $1$ 或 $2$，
+得到 $1112$、$1122$、$1212$、$1222$ 四种类型。$\mathcal E_2$ 也允许 $Y_{00}=2$，
+这时单调性给出第五种类型 $2222$。用这五种类型在 $\mathcal E_2$ 中的条件概率加权，得到
 \[
 \begin{aligned}
- \mathcal R_1(\mathcal E_2)&=\pi_{1122}+\tfrac12(\pi_{1112}+\pi_{1222}),\\
- \mathcal R_2(\mathcal E_2)&=\pi_{1212}+\tfrac12(\pi_{1112}+\pi_{1222}),\\
- \mathcal R_\phi(\mathcal E_2)&=1+\pi_{2222}.
+ \mathcal R_1(\mathcal E_2)
+ &=\mathrm{pr}(T=1122\mid\mathcal E_2)
+ +\tfrac12\{\mathrm{pr}(T=1112\mid\mathcal E_2)+\mathrm{pr}(T=1222\mid\mathcal E_2)\},\\
+ \mathcal R_2(\mathcal E_2)
+ &=\mathrm{pr}(T=1212\mid\mathcal E_2)
+ +\tfrac12\{\mathrm{pr}(T=1112\mid\mathcal E_2)+\mathrm{pr}(T=1222\mid\mathcal E_2)\},\\
+ \mathcal R_\phi(\mathcal E_2)&=1+\mathrm{pr}(T=2222\mid\mathcal E_2).
 \end{aligned}
 \]
-背景责任在类型 $2222$ 上为 $2$ 分，在其余四个类型上均为 $1$ 分。
 
-\noindent{\headingweight 三级。} 按表中三级的十四行分别加权，合并责任值相同的项，得到
+\noindent{\headingweight 三级。} 按 $\mathrm{pr}(T=t\mid\mathcal E_3)$ 对十四行加权。
+责任值相同的行可以合并，其权重为这些类型的条件概率之和。于是
 \[
 \begin{aligned}
  \mathcal R_1(\mathcal E_3)
- &=2\pi_{1133}+\tfrac32(\pi_{1123}+\pi_{1233})
-   +(\pi_{1113}+\pi_{1223}+\pi_{1333}+\pi_{2233})\\
- &\quad+\tfrac12(\pi_{1213}+\pi_{1323}+\pi_{2223}+\pi_{2333}),\\[3pt]
+ &=2\,\mathrm{pr}(T=1133\mid\mathcal E_3)
+    +\tfrac32\,\mathrm{pr}(T\in\{1123,1233\}\mid\mathcal E_3)\\
+ &\quad+\mathrm{pr}(T\in\{1113,1223,1333,2233\}\mid\mathcal E_3)\\
+ &\quad+\tfrac12\,\mathrm{pr}(T\in\{1213,1323,2223,2333\}\mid\mathcal E_3),\\[3pt]
  \mathcal R_2(\mathcal E_3)
- &=2\pi_{1313}+\tfrac32(\pi_{1213}+\pi_{1323})
-   +(\pi_{1113}+\pi_{1223}+\pi_{1333}+\pi_{2323})\\
- &\quad+\tfrac12(\pi_{1123}+\pi_{1233}+\pi_{2223}+\pi_{2333}),\\[3pt]
+ &=2\,\mathrm{pr}(T=1313\mid\mathcal E_3)
+    +\tfrac32\,\mathrm{pr}(T\in\{1213,1323\}\mid\mathcal E_3)\\
+ &\quad+\mathrm{pr}(T\in\{1113,1223,1333,2323\}\mid\mathcal E_3)\\
+ &\quad+\tfrac12\,\mathrm{pr}(T\in\{1123,1233,2223,2333\}\mid\mathcal E_3),\\[3pt]
  \mathcal R_\phi(\mathcal E_3)
- &=1+(\pi_{2223}+\pi_{2233}+\pi_{2323}+\pi_{2333})+2\pi_{3333}.
+ &=1+\mathrm{pr}(T\in\{2223,2233,2323,2333\}\mid\mathcal E_3)
+      +2\,\mathrm{pr}(T=3333\mid\mathcal E_3).
 \end{aligned}
 \]
 在每组内，$\mathcal R_\phi(\mathcal E_k)=\mathrm E(Y_{00}\mid\mathcal E_k)$，
