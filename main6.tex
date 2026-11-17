@@ -1,0 +1,541 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
+\pagestyle{plain}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+% Use a single stroke for Chinese headings when pdfLaTeX has no bold CJK font.
+\newcommand{\headingweight}{\ifPDFTeX\mdseries\else\bfseries\fi}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\headingweight}}
+\makeatother
+
+\newcommand{\indep}{\mathrel{\perp\!\!\!\perp}}
+\newtheoremstyle{report}{7pt}{7pt}{\normalfont}{}{\headingweight}{。}{0.4em}{}
+\theoremstyle{report}
+\newtheorem{assumption}{假设}
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem{proposition}{命题}
+\newtheorem*{markova}{假设 3a}
+\newtheorem*{markovb}{假设 3b}
+\renewcommand{\proofname}{证明}
+\makeatletter
+\renewenvironment{proof}[1][证明]{\par\pushQED{\qed}\normalfont
+  \topsep=6pt plus 2pt\relax\trivlist
+  \item[\hskip\labelsep{\headingweight #1。}]\ignorespaces}
+  {\popQED\endtrivlist\@endpefalse}
+\makeatother
+\newcommand{\pr}{\mathrm{pr}}
+\newcommand{\E}{\mathrm E}
+\newcommand{\avec}{\boldsymbol a}
+\newcommand{\zero}{\boldsymbol 0}
+\newcommand{\one}{\boldsymbol 1}
+\begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
+\begin{center}
+{\LARGE\headingweight 单路径 Markov 条件下的有序结局责任识别}\\[5pt]
+{\large 两个暴露与一般 $p$ 个暴露}
+\end{center}
+
+结局等级按相邻一级计 $1$ 分。责任以该评分为单位；这一评分约定是归因定义的一部分。
+
+\section{两个暴露：两种可选的单路径假设}
+设 $X_1,X_2\in\{0,1\}$，$Y\in\{0,1,2\}$，数值越大表示结局越严重。
+记 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$，并定义
+\[
+\mathcal E_1=\{X_1=X_2=1,Y=1\},\qquad
+\mathcal E_2=\{X_1=X_2=1,Y=2\}.
+\]
+对给定类型 $t$，将下式中的潜在结果取为该类型的相应分量：
+\begin{equation}\label{eq:p2-score}
+\begin{aligned}
+R(1\mid t,\mathcal E_k)&=\tfrac12\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\},\\
+R(2\mid t,\mathcal E_k)&=\tfrac12\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\},\\
+R(0\mid t,\mathcal E_k)&=Y_{00},\qquad k=1,2,\quad t_{11}=k.
+\end{aligned}
+\end{equation}
+其中 $0$ 表示背景。病例平均责任定义为
+\[
+\mathcal R_j(\mathcal E_k)
+=\sum_{t:t_{11}=k}R(j\mid t,\mathcal E_k)\pr(T=t\mid\mathcal E_k),
+\qquad j=0,1,2.
+\]
+
+\begin{assumption}[一致性、随机分配与正值性]\label{ass:p2-data}
+观测结局为 $Y=Y_{X_1X_2}$，且
+\[
+(X_1,X_2)\indep T,\qquad
+\pr(X_1=a,X_2=b)>0,\quad a,b=0,1.
+\]
+\end{assumption}
+
+\begin{assumption}[单步单调增量]\label{ass:p2-unit}
+下列不等式几乎处处成立：
+\[
+\begin{aligned}
+0\le Y_{10}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{10}\le1,\\
+0\le Y_{01}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{01}\le1.
+\end{aligned}
+\]
+\end{assumption}
+
+\begin{markova}[经 $Y_{10}$ 的单路径条件]
+选定路径 $Y_{00}\longrightarrow Y_{10}\longrightarrow Y_{11}$，假设
+\begin{equation}\label{eq:markov-a}
+Y_{11}\indep Y_{00}\mid Y_{10}.
+\end{equation}
+\end{markova}
+
+\begin{markovb}[经 $Y_{01}$ 的单路径条件]
+选定路径 $Y_{00}\longrightarrow Y_{01}\longrightarrow Y_{11}$，假设
+\begin{equation}\label{eq:markov-b}
+Y_{11}\indep Y_{00}\mid Y_{01}.
+\end{equation}
+\end{markovb}
+假设 3a 与假设 3b 是两种可替代的建模选择，识别时指定采用其中一种，
+不要求同时成立。路径箭头表示暴露组合的加入顺序及相应的分布分解，
+不表示一个潜在结果在因果上导致另一个潜在结果。
+\setcounter{assumption}{3}
+
+\clearpage
+\section{两个暴露的识别定理}
+记
+\[
+\xi_{ab}=\pr(Y_{ab}=2),\qquad
+\theta=\pr(Y_{00}=0,Y_{11}=2).
+\]
+\begin{theorem}[选定单路径下的病例平均责任]\label{thm:p2}
+在假设~\ref{ass:p2-data}、\ref{ass:p2-unit} 下，若采用假设 3a，则
+\begin{equation}\label{eq:theta-a}
+\theta=
+\begin{cases}
+\dfrac{\{\pr(Y_{00}=0)-\pr(Y_{10}=0)\}(\xi_{11}-\xi_{10})}
+      {\pr(Y_{10}=1)},&\pr(Y_{10}=1)>0,\\[8pt]
+0,&\pr(Y_{10}=1)=0.
+\end{cases}
+\end{equation}
+若采用假设 3b，则
+\begin{equation}\label{eq:theta-b}
+\theta=
+\begin{cases}
+\dfrac{\{\pr(Y_{00}=0)-\pr(Y_{01}=0)\}(\xi_{11}-\xi_{01})}
+      {\pr(Y_{01}=1)},&\pr(Y_{01}=1)>0,\\[8pt]
+0,&\pr(Y_{01}=1)=0.
+\end{cases}
+\end{equation}
+将所选模型给出的 $\theta$ 代入下式，即可识别全部平均责任。
+当 $\xi_{11}>0$ 时，
+\begin{equation}\label{eq:p2-grade2}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\
+\mathcal R_2(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\
+\mathcal R_0(\mathcal E_2)
+ &=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
+\end{aligned}
+\end{equation}
+当 $\pr(Y_{11}=1)>0$ 时，
+\begin{equation}\label{eq:p2-grade1}
+\begin{aligned}
+\mathcal R_1(\mathcal E_1)
+ &=\frac{\E(Y_{10})-\E(Y_{00})+\E(Y_{11})-\E(Y_{01})
+          -\xi_{11}+\xi_{01}-\xi_{10}+\xi_{00}-\theta}
+         {2\pr(Y_{11}=1)},\\[3pt]
+\mathcal R_2(\mathcal E_1)
+ &=\frac{\E(Y_{01})-\E(Y_{00})+\E(Y_{11})-\E(Y_{10})
+          -\xi_{11}+\xi_{10}-\xi_{01}+\xi_{00}-\theta}
+         {2\pr(Y_{11}=1)},\\[3pt]
+\mathcal R_0(\mathcal E_1)
+ &=\frac{\E(Y_{00})-\xi_{11}-\xi_{00}+\theta}{\pr(Y_{11}=1)}.
+\end{aligned}
+\end{equation}
+每个病例等级下均有 $\sum_{j=0}^{2}\mathcal R_j(\mathcal E_k)=k$。
+\end{theorem}
+
+\begin{proof}
+随机分配与一致性给出
+$\pr(T=t\mid\mathcal E_k)=\pr(T=t\mid Y_{11}=k)$，
+并识别四个潜在结果的全部边际概率和均值。
+单步增量条件蕴含
+\[
+\{Y_{00}=0,Y_{11}=2\}
+=\{Y_{00}=0,Y_{10}=1,Y_{11}=2\},
+\]
+且在该事件上同样有 $Y_{01}=1$。此外，
+\[
+\begin{aligned}
+\pr(Y_{00}=0,Y_{10}=1)&=\pr(Y_{00}=0)-\pr(Y_{10}=0),\\
+\pr(Y_{10}=1,Y_{11}=2)&=\xi_{11}-\xi_{10}.
+\end{aligned}
+\]
+因此，在 $\pr(Y_{10}=1)>0$ 且采用假设 3a 时，
+\[
+\begin{aligned}
+\theta
+&=\pr(Y_{10}=1)\pr(Y_{00}=0,Y_{11}=2\mid Y_{10}=1)\\
+&=\pr(Y_{10}=1)\pr(Y_{00}=0\mid Y_{10}=1)
+                       \pr(Y_{11}=2\mid Y_{10}=1)\\
+&=\frac{\pr(Y_{00}=0,Y_{10}=1)\pr(Y_{10}=1,Y_{11}=2)}
+        {\pr(Y_{10}=1)}.
+\end{aligned}
+\]
+这给出式~\eqref{eq:theta-a}。分母为零时，上述事件包含关系给出 $\theta=0$。
+在假设 3b 下，将上述推导中的 $Y_{10}$ 换为 $Y_{01}$，得到式~\eqref{eq:theta-b}。
+
+对 $ab=10,01$，单步增量条件给出
+\[
+\E\{Y_{ab}\mathbf1(Y_{11}=2)\}
+=\pr(Y_{ab}=1,Y_{11}=2)+2\pr(Y_{ab}=2)
+=\xi_{11}+\xi_{ab}.
+\]
+无暴露结局满足
+\[
+\begin{aligned}
+\E\{Y_{00}\mathbf1(Y_{11}=2)\}
+&=\pr(Y_{00}=1,Y_{11}=2)+2\xi_{00}\\
+&=(\xi_{11}-\theta-\xi_{00})+2\xi_{00}
+=\xi_{11}+\xi_{00}-\theta.
+\end{aligned}
+\]
+将这些恒等式代入式~\eqref{eq:p2-score} 的带指标期望，再除以
+$\pr(Y_{11}=2)$，得到式~\eqref{eq:p2-grade2}。
+
+当 $Y_{11}=0$ 时，各责任均为零。
+记式~\eqref{eq:p2-score} 中的任一责任为 $R_j(T)$，则
+\[
+\E\{R_j(T)\mathbf1(Y_{11}=1)\}
+=\E\{R_j(T)\}-\E\{R_j(T)\mathbf1(Y_{11}=2)\}.
+\]
+将刚才计算的未标准化二级病例贡献相减，再除以 $\pr(Y_{11}=1)$，
+得到式~\eqref{eq:p2-grade1}，该推导不要求 $\xi_{11}>0$。
+逐类型有 $R_0(T)+R_1(T)+R_2(T)=Y_{11}$，取条件期望即得加总等式。
+\end{proof}
+
+两个 $\theta$ 表达式仅在同时施加假设 3a、3b 时才必须相等。
+“选定一条路径并假设其成立”不同于“至少一条未知路径满足条件”；
+后一模型需要对各候选路径及其相容联合分布分别分析，不能直接选取一个表达式作为点识别结果。
+
+\section{一般 $p$：暴露组合与责任}
+设 $\boldsymbol X=(X_1,\ldots,X_p)\in\{0,1\}^p$，
+潜在结果为 $Y_{\avec}\in\{0,1,\ldots,K\}$。
+下标 $\avec=(a_1,\ldots,a_p)$ 直接表示暴露组合。
+记 $|\avec|=\sum_j a_j$，$\zero=(0,\ldots,0)$，
+$\one=(1,\ldots,1)$。当 $a_j=0$ 时，$\avec^{j+}$ 表示仅将第 $j$ 个坐标改为 $1$。
+令 $T=(Y_{\avec}:\avec\in\{0,1\}^p)$，以及
+\[
+\mathcal E_k=\{\boldsymbol X=\one,Y=k\},\qquad k=1,\ldots,K.
+\]
+对 $j=1,\ldots,p$，定义
+\begin{equation}\label{eq:general-score}
+R_j(T)=
+\sum_{\avec:a_j=0}
+ \frac{|\avec|!\,(p-|\avec|-1)!}{p!}
+ (Y_{\avec^{j+}}-Y_{\avec}),\qquad R_0(T)=Y_{\zero}.
+\end{equation}
+在 $Y_{\one}=k$ 的类型上，上式给出 $R(j\mid T,\mathcal E_k)$。
+定义病例平均责任为
+\[
+\mathcal R_j(\mathcal E_k)=\E\{R_j(T)\mid\mathcal E_k\}.
+\]
+
+\begin{assumption}[一般 $p$ 的观测条件]\label{ass:p-data}
+$Y=Y_{\boldsymbol X}$，$\boldsymbol X\indep T$，且
+$\pr(\boldsymbol X=\avec)>0$ 对每个暴露组合成立。
+\end{assumption}
+
+\begin{assumption}[一般 $p$ 的单步增量]\label{ass:p-unit}
+对每个 $a_j=0$ 的组合及暴露 $j$，几乎处处有
+\[
+0\le Y_{\avec^{j+}}-Y_{\avec}\le1.
+\]
+\end{assumption}
+
+记
+\[
+f_{\avec}(r)=\pr(Y_{\avec}=r),\qquad
+F_{\avec}(r)=\pr(Y_{\avec}\le r).
+\]
+在假设~\ref{ass:p-data} 下，
+$f_{\avec}(r)=\pr(Y=r\mid\boldsymbol X=\avec)$，因而全部 $f_{\avec},F_{\avec}$ 可识别。
+
+\begin{lemma}[相邻潜在结果的联合分布]\label{lem:edge}
+若 $U,V\in\{0,\ldots,K\}$ 且 $0\le V-U\le1$，
+则它们的边际分布识别联合分布。对 $0\le r<K$，
+\begin{equation}\label{eq:edge}
+\begin{aligned}
+\pr(U=r,V=r+1)&=F_U(r)-F_V(r),\\
+\pr(U=r,V=r)&=\pr(U=r)-\{F_U(r)-F_V(r)\}.
+\end{aligned}
+\end{equation}
+另有 $\pr(U=K,V=K)=\pr(U=K)$，其余位置的概率为零。
+\end{lemma}
+\begin{proof}
+单调性给出 $\{V\le r\}\subseteq\{U\le r\}$。
+单步增量进一步给出
+$\{U\le r,V>r\}=\{U=r,V=r+1\}$，所以第一式成立。
+固定 $U=r$ 后只可能有 $V=r,r+1$，故第二式成立。
+\end{proof}
+
+\section{为每个组合指定一条通向全暴露的路径}
+预先固定一个选择规则 $h$：对每个 $\avec\ne\one$，
+$h(\avec)$ 只将 $\avec$ 的一个零坐标改为 $1$。
+反复应用 $h$，每个组合均沿唯一的选定路径到达 $\one$。
+这些选定边组成一棵指向全暴露组合的有向树。
+
+\begin{assumption}[选定路径上的终点 Markov 条件]\label{ass:terminal}
+对每个 $|\avec|\le p-2$ 的组合，假设
+\begin{equation}\label{eq:terminal}
+Y_{\one}\indep Y_{\avec}\mid Y_{h(\avec)}.
+\end{equation}
+全部条件均针对同一个潜在结果联合分布。
+\end{assumption}
+该条件要求：沿选定路径，下一节点的等级足以概括当前节点中与最终结局有关的信息。
+每个起点只采用一个下一节点，不要求同一起点的所有加入方向均满足条件。
+当 $|\avec|=p-1$ 时，$h(\avec)=\one$，上述条件独立关系自动成立，无需另加假设。
+
+定义选定边的转移矩阵
+\[
+Q_{\avec}(r,s)=
+\pr\{Y_{h(\avec)}=s\mid Y_{\avec}=r\},
+\qquad \avec\ne\one.
+\]
+当 $f_{\avec}(r)>0$ 时，引理~\ref{lem:edge} 给出
+\begin{equation}\label{eq:q}
+\begin{aligned}
+Q_{\avec}(r,r+1)
+ &=\frac{F_{\avec}(r)-F_{h(\avec)}(r)}{f_{\avec}(r)}
+       &&(r<K),\\
+Q_{\avec}(r,r)
+ &=1-Q_{\avec}(r,r+1)
+       &&(r<K),\\
+Q_{\avec}(K,K)&=1 &&(f_{\avec}(K)>0).
+\end{aligned}
+\end{equation}
+其余位置为零。当 $f_{\avec}(r)=0$ 时，可将该行任取为一个概率向量，例如单位点质量。
+此约定不影响下文出现的可识别联合概率。
+
+\begin{theorem}[任意 $p$ 的病例 Shapley 责任]\label{thm:general}
+在假设~\ref{ass:p-data}--\ref{ass:terminal} 下，定义
+\begin{equation}\label{eq:h-recursion}
+H_{\one}(r,k)=\mathbf1(r=k),\qquad
+H_{\avec}(r,k)=
+\sum_{s=0}^{K}Q_{\avec}(r,s)H_{h(\avec)}(s,k),
+\quad \avec\ne\one.
+\end{equation}
+则对每个暴露组合及等级，
+\begin{equation}\label{eq:pair-identification}
+\pr(Y_{\avec}=r,Y_{\one}=k)=f_{\avec}(r)H_{\avec}(r,k).
+\end{equation}
+因此，当 $f_{\one}(k)>0$ 时，令
+\begin{equation}\label{eq:mu}
+\mu_{\avec}(k)=
+\frac{\sum_{r=0}^{K}r f_{\avec}(r)H_{\avec}(r,k)}
+     {f_{\one}(k)},
+\end{equation}
+即有
+\begin{equation}\label{eq:general-r}
+\begin{aligned}
+\mathcal R_j(\mathcal E_k)
+ &=\sum_{\avec:a_j=0}
+   \frac{|\avec|!\,(p-|\avec|-1)!}{p!}
+   \{\mu_{\avec^{j+}}(k)-\mu_{\avec}(k)\},
+       &&j=1,\ldots,p,\\
+\mathcal R_0(\mathcal E_k)&=\mu_{\zero}(k).
+\end{aligned}
+\end{equation}
+所有右侧均由观测分布识别，且
+$\sum_{j=0}^{p}\mathcal R_j(\mathcal E_k)=k$。
+\end{theorem}
+
+\begin{proof}
+由引理~\ref{lem:edge}，每条选定边的联合分布可识别。
+在 $f_{\avec}(r)>0$ 的行上，转移矩阵因而可识别。
+对满足 $f_{h(\avec)}(s)=0$ 的等级 $s$，有
+\[
+\sum_{r=0}^{K}f_{\avec}(r)Q_{\avec}(r,s)
+=f_{h(\avec)}(s)=0.
+\]
+非负性保证 $f_{\avec}(r)>0$ 时 $Q_{\avec}(r,s)=0$。
+因此，正概率起点不会经一步转移到零概率等级，零概率行的约定不影响最终的联合概率。
+
+对距全暴露组合仅一步的节点，
+\[
+H_{\avec}(r,k)=Q_{\avec}(r,k)
+=\pr(Y_{\one}=k\mid Y_{\avec}=r).
+\]
+假设对节点 $h(\avec)$ 已证明
+$H_{h(\avec)}(s,k)=\pr(Y_{\one}=k\mid Y_{h(\avec)}=s)$，
+其中只需考虑正概率的 $s$。当 $|\avec|\le p-2$ 时，
+全概率公式与假设~\ref{ass:terminal} 给出
+\[
+\begin{aligned}
+&\pr(Y_{\one}=k\mid Y_{\avec}=r)\\
+&\quad=\sum_{s=0}^{K}
+ \pr(Y_{\one}=k\mid Y_{\avec}=r,Y_{h(\avec)}=s)
+ \pr(Y_{h(\avec)}=s\mid Y_{\avec}=r)\\
+&\quad=\sum_{s=0}^{K}
+ \pr(Y_{\one}=k\mid Y_{h(\avec)}=s)Q_{\avec}(r,s)
+ =H_{\avec}(r,k).
+\end{aligned}
+\]
+各项仅在相应条件事件概率为正时使用条件概率；其余项的权重为零。
+按节点距 $\one$ 的步数递推，得到全部节点的条件分布。
+乘以 $f_{\avec}(r)$，即得式~\eqref{eq:pair-identification}，
+并由求和得到 $\mu_{\avec}(k)=\E(Y_{\avec}\mid Y_{\one}=k)$。
+
+随机分配与一致性保证
+$\E\{R_j(T)\mid\mathcal E_k\}=\E\{R_j(T)\mid Y_{\one}=k\}$。
+式~\eqref{eq:general-score} 对潜在结果是线性的，
+故逐项取条件期望得到式~\eqref{eq:general-r}。
+沿任一加入顺序，全部增量之和均为 $Y_{\one}-Y_{\zero}$；
+对所有顺序平均后仍有该恒等式。
+加入背景责任，再取条件期望即得责任加总为 $k$。
+\end{proof}
+
+定理~\ref{thm:general} 只需识别每个潜在结果与全暴露结局的二元联合分布。
+它不要求识别完整类型分布，也未声称选定路径条件识别任意多个潜在结果的联合分布。
+
+当 $p=2$ 时，唯一需要实质性条件独立假设的起点为 $00$。
+选择 $h(00)=10$ 即得到假设 3a；选择 $h(00)=01$ 即得到假设 3b。
+因此，定理~\ref{thm:p2} 是上述选定路径结构在三个结局等级下的显式表达。
+
+\clearpage
+\section{路径选择与相容性}
+当 $p=3$ 时，例如选择
+\[
+\begin{aligned}
+000&\longrightarrow100\longrightarrow110\longrightarrow111,\\
+010&\longrightarrow110,\qquad
+001\longrightarrow101\longrightarrow111,\qquad
+011\longrightarrow111.
+\end{aligned}
+\]
+所需的四条终点 Markov 条件为
+\[
+\begin{aligned}
+Y_{111}&\indep Y_{000}\mid Y_{100},&
+Y_{111}&\indep Y_{100}\mid Y_{110},\\
+Y_{111}&\indep Y_{010}\mid Y_{110},&
+Y_{111}&\indep Y_{001}\mid Y_{101}.
+\end{aligned}
+\]
+该构造对每个节点仅选一个方向，而非同时要求全部 $3!$ 种加入顺序均为 Markov 链。
+一般 $p$ 下，有实质性条件的节点数为 $2^p-p-1$。
+这些是所给定理的充分条件，并未断言它们是识别责任所必需的最弱条件。
+
+上述假设允许非退化的相容联合分布。例如，令 $B\in\{0,\ldots,K\}$
+与 $D_1,\ldots,D_p\in\{0,1\}$ 相互独立，并定义
+\[
+Y_{\avec}=\min\left\{K,B+\sum_{j=1}^{p}a_jD_j\right\}.
+\]
+该构造满足所有单步增量限制。对任一选定边，尚未加入的 $D_j$
+独立于 $(Y_{\avec},Y_{h(\avec)})$，且
+\[
+Y_{\one}=\min\left\{K,Y_{h(\avec)}+
+               \sum_{j:h(\avec)_j=0}D_j\right\},
+\]
+故终点 Markov 条件成立。此构造用于说明假设的相容性，不是定理额外要求的模型。
+
+\clearpage
+\section{仅有一条完整路径的识别范围}
+固定一种加入顺序，将该路径上的潜在结果依次记为
+$Z_0,\ldots,Z_p$，其中 $Z_0=Y_{\zero}$、$Z_p=Y_{\one}$。
+若该路径满足一阶 Markov 条件，则
+\[
+\pr(Z_0=z_0,\ldots,Z_p=z_p)
+=\pr(Z_0=z_0)\prod_{m=1}^{p}
+  \pr(Z_m=z_m\mid Z_{m-1}=z_{m-1}).
+\]
+单步增量与路径上各节点的边际分布识别每个相邻转移，
+因而识别整条路径的联合分布，以及给定 $Z_p=k$ 时沿该固定顺序的每一步平均贡献。
+一般 Shapley 责任还涉及该路径之外的暴露组合。
+
+\begin{proposition}[一条完整 Markov 路径一般不足]\label{prop:one-path}
+当 $p=3$、$Y\in\{0,1,2\}$ 时，即使所有单步增量均在 $[0,1]$ 内，
+且指定路径
+$Y_{000}\longrightarrow Y_{100}\longrightarrow Y_{110}\longrightarrow Y_{111}$
+满足一阶 Markov 条件，四项病例平均 Shapley 责任也不一定全部可识别。
+\end{proposition}
+\begin{proof}
+令
+\[
+Y_{000}=0,\qquad
+Y_{100}=Y_{001}=Y_{110}=Y_{101}=Y_{011}=1.
+\]
+只保留 $Y_{010}=U\in\{0,1\}$ 与 $Y_{111}=V\in\{1,2\}$ 的随机性。
+比较下列两个总体，各表格单元内的两种取值分别以概率 $1/2$ 出现：
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+总体 & $(U,V)$ 的取值 & 给定 $V=2$ 时的 $U$\\
+\midrule
+A & $(0,1),\ (1,2)$ & $1$\\
+B & $(1,1),\ (0,2)$ & $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+两个总体均满足全部相邻单步增量限制，八个潜在结果的边际分布完全相同。
+采用相同的独立随机暴露分配后，它们生成相同的观测分布。
+指定路径在两个总体中均为 $(0,1,1,V)$，故均满足一阶 Markov 条件，
+且整条路径的联合分布也相同。
+
+在 $V=2$ 时，由 Shapley 权重 $1/3,1/6,1/3$ 直接计算，
+\[
+R_1=\frac{5-U}{6},\qquad
+R_2=\frac{1+U}{3},\qquad
+R_3=\frac{5-U}{6},\qquad R_0=0.
+\]
+例如，
+\[
+R_2=\tfrac13(U-0)+\tfrac16\{(1-1)+(1-1)\}+\tfrac13(2-1).
+\]
+因此，在 $\mathcal E_2=\{X_1=X_2=X_3=1,Y=2\}$ 下，
+\[
+\begin{aligned}
+(\mathcal R_1,\mathcal R_2,\mathcal R_3)_{\mathrm A}
+ &=\left(\tfrac23,\tfrac23,\tfrac23\right),\\
+(\mathcal R_1,\mathcal R_2,\mathcal R_3)_{\mathrm B}
+ &=\left(\tfrac56,\tfrac13,\tfrac56\right).
+\end{aligned}
+\]
+观测分布及选定路径分布相同，而目标责任不同，故不能点识别。
+\end{proof}
+
+定理~\ref{thm:general} 中的“每个组合具有一条选定路径”覆盖全部需要归因的潜在结果。
+命题~\ref{prop:one-path} 中的“一条完整路径”只覆盖 $p+1$ 个组合。
+两者分别对应不同的信息要求，不能互相替代。
+在 $p=2$、三级结局的情形中，一条路径能够补足唯一未识别的 $\theta$，
+从而识别全部责任；一般 $p$ 不具备这一自动简化。
+
+\ifPDFTeX\end{CJK*}\fi
+\end{document}
+
