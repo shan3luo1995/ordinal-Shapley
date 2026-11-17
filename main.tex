@@ -1,17 +1,27 @@
-% !TeX program = xelatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[margin=19mm]{geometry}
-\usepackage[no-math]{fontspec}
 \usepackage{amsmath,booktabs,array,xcolor}
-\IfFontExistsTF{Noto Serif CJK SC}{
-  \setmainfont{Noto Serif CJK SC}
-  \setsansfont{Noto Sans CJK SC}
-}{
-  \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
-  \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
-}
-\XeTeXlinebreaklocale "zh"
-\XeTeXlinebreakskip=0pt plus 0.5pt
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{3pt}
@@ -26,6 +36,7 @@
   $#1$ & $#2$ & $#3$ & $#4$ &
   $r_1(#1,#2,#3,#4)$ & $r_2(#1,#2,#3,#4)$ & $r_0(#1,#2,#3,#4)$ \\}
 \begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
 {\sffamily\bfseries\LARGE 双暴露下 3 级结局的因果责任}\par\vspace{3pt}
 设 $Y\in\{1,2,3\}$，3 级最严重。观测到 $E=\{X_1=1,X_2=1,Y=3\}$。
 记 $Y_{ab}$ 为将 $(X_1,X_2)$ 设为 $(a,b)$ 时的潜在结局。由一致性，$Y_{11}=3$。
@@ -80,4 +91,5 @@ $X_1$ 的责任 & $X_2$ 的责任 & 背景责任 \\
 
 \vfill
 {\footnotesize\color{accent} 参考文献\quad Luo, Deng, Zhao \& Geng (2026). arXiv:2606.18459.}
+\ifPDFTeX\end{CJK*}\fi
 \end{document}
