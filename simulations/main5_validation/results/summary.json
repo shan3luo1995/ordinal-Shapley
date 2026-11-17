@@ -1,0 +1,270 @@
+{
+  "config": {
+    "experiments": 100,
+    "sample_sizes": [
+      2000,
+      10000,
+      50000
+    ],
+    "seed": 20261117,
+    "primary_theta_path": "Y10",
+    "source_main5_blob": "eac4b16133d05aa09b3438ed6bfe138eaaaa4bfc",
+    "design": "100 heterogeneous populations; nested balanced samples within population",
+    "score": "Y=0,1,2; one point per grade"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "matplotlib": "3.10.8"
+  },
+  "exact_checks": {
+    "populations_passed": 100,
+    "deterministic_boundary_checks_passed": 3,
+    "max_markov_residual": 2.220446049250313e-16,
+    "max_oracle_error": 3.2751579226442118e-15,
+    "max_other_path_oracle_error": 2.886579864025407e-15,
+    "max_theta_error": 1.249000902703301e-16,
+    "alternative_min_tv": 0.00678747813403104,
+    "alternative_max_marginal_error": 1.1102230246251565e-16,
+    "alternative_max_triple_error": 5.551115123125783e-17,
+    "alternative_max_responsibility_error": 4.440892098500626e-16,
+    "violation_max_marginal_error": 2.220446049250313e-16,
+    "violation_min_markov_residual": 0.0035856809373968623,
+    "violation_mean_max_error": 0.0304640433619646,
+    "violation_max_error": 0.11407585015849606,
+    "min_case_probability": 0.05160758037991506,
+    "min_middle_probability": 0.16096608399551043
+  },
+  "finite_sample": {
+    "datasets": 300,
+    "responsibility_estimates": 1800,
+    "undefined_estimates": 0,
+    "outside_score_range": 4,
+    "zero_denominator_datasets": 0,
+    "pooled_rmse_by_n": {
+      "2000": 0.05414261896900001,
+      "10000": 0.022627696581578555,
+      "50000": 0.010032178098004387
+    }
+  },
+  "metrics": [
+    {
+      "n": 2000,
+      "grade": 1,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": -0.009210116468934078,
+      "mcse_mean_error": 0.006824710093656633,
+      "rmse": 0.0685267565535882,
+      "mae": 0.04925325050864364,
+      "max_abs_error": 0.28058060700029264,
+      "outside_score_range": 0
+    },
+    {
+      "n": 2000,
+      "grade": 1,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": -0.0032437404304820837,
+      "mcse_mean_error": 0.005639656170671014,
+      "rmse": 0.05620754666942616,
+      "mae": 0.04463068556005014,
+      "max_abs_error": 0.16488742543712853,
+      "outside_score_range": 1
+    },
+    {
+      "n": 2000,
+      "grade": 1,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": 0.012453856899416067,
+      "mcse_mean_error": 0.007532322612582959,
+      "rmse": 0.07597335757839035,
+      "mae": 0.05399251643153885,
+      "max_abs_error": 0.3725549547811478,
+      "outside_score_range": 2
+    },
+    {
+      "n": 2000,
+      "grade": 2,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": 0.0026966704275652497,
+      "mcse_mean_error": 0.004611565574862643,
+      "rmse": 0.04596367260641245,
+      "mae": 0.034212727680814965,
+      "max_abs_error": 0.1443580418427013,
+      "outside_score_range": 0
+    },
+    {
+      "n": 2000,
+      "grade": 2,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": 0.001349802192104315,
+      "mcse_mean_error": 0.0028503137549243593,
+      "rmse": 0.028392367418153045,
+      "mae": 0.021333704189058153,
+      "max_abs_error": 0.08538187980774764,
+      "outside_score_range": 0
+    },
+    {
+      "n": 2000,
+      "grade": 2,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": -0.004046472619669537,
+      "mcse_mean_error": 0.0032196112085861256,
+      "rmse": 0.032289281159118784,
+      "mae": 0.024588176072020858,
+      "max_abs_error": 0.10904796703689705,
+      "outside_score_range": 0
+    },
+    {
+      "n": 10000,
+      "grade": 1,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": -0.0010017754942972035,
+      "mcse_mean_error": 0.0026357081273912057,
+      "rmse": 0.02624409133667584,
+      "mae": 0.020382576494795596,
+      "max_abs_error": 0.07925819891354038,
+      "outside_score_range": 0
+    },
+    {
+      "n": 10000,
+      "grade": 1,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": 0.00012128673202592449,
+      "mcse_mean_error": 0.0027565538692827176,
+      "rmse": 0.027427632866561052,
+      "mae": 0.02140533435682969,
+      "max_abs_error": 0.0689501556590415,
+      "outside_score_range": 0
+    },
+    {
+      "n": 10000,
+      "grade": 1,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": 0.000880488762271404,
+      "mcse_mean_error": 0.0027576031456598947,
+      "rmse": 0.027451928825619296,
+      "mae": 0.02125146221089915,
+      "max_abs_error": 0.0888923986516359,
+      "outside_score_range": 1
+    },
+    {
+      "n": 10000,
+      "grade": 2,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": 0.003838307494463542,
+      "mcse_mean_error": 0.0019575098149398457,
+      "rmse": 0.019851579969993625,
+      "mae": 0.015847713307243348,
+      "max_abs_error": 0.05042584904112313,
+      "outside_score_range": 0
+    },
+    {
+      "n": 10000,
+      "grade": 2,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": -0.0006622994092401819,
+      "mcse_mean_error": 0.0015249314148333476,
+      "rmse": 0.015187323881517039,
+      "mae": 0.01194858814122924,
+      "max_abs_error": 0.0382457768833849,
+      "outside_score_range": 0
+    },
+    {
+      "n": 10000,
+      "grade": 2,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": -0.0031760080852233368,
+      "mcse_mean_error": 0.001565451118335296,
+      "rmse": 0.015896543981105758,
+      "mae": 0.012431644918841469,
+      "max_abs_error": 0.056999046611512894,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 1,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": 0.0005602976835269477,
+      "mcse_mean_error": 0.0012634283938412327,
+      "rmse": 0.01258343406325257,
+      "mae": 0.010181638219568247,
+      "max_abs_error": 0.03993804872374421,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 1,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": 0.00014697949288611025,
+      "mcse_mean_error": 0.0010958588522421112,
+      "rmse": 0.010904648492777355,
+      "mae": 0.008661302406536365,
+      "max_abs_error": 0.030387809100851315,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 1,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": -0.0007072771764130583,
+      "mcse_mean_error": 0.001256983712841935,
+      "rmse": 0.012526812778393175,
+      "mae": 0.009892730494410938,
+      "max_abs_error": 0.05114989621489652,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 2,
+      "cause": 0,
+      "n_valid": 100,
+      "mean_error": 0.00040134487328681524,
+      "mcse_mean_error": 0.0009009983266702085,
+      "rmse": 0.00897379954026736,
+      "mae": 0.007106460804777845,
+      "max_abs_error": 0.02444954547819922,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 2,
+      "cause": 1,
+      "n_valid": 100,
+      "mean_error": -2.9163466536969578e-05,
+      "mcse_mean_error": 0.0006971821521995624,
+      "rmse": 0.00693693613124672,
+      "mae": 0.005398414700728775,
+      "max_abs_error": 0.023332022976865208,
+      "outside_score_range": 0
+    },
+    {
+      "n": 50000,
+      "grade": 2,
+      "cause": 2,
+      "n_valid": 100,
+      "mean_error": -0.0003721814067498265,
+      "mcse_mean_error": 0.0006427819453920212,
+      "rmse": 0.006406419694525443,
+      "mae": 0.005081314793405272,
+      "max_abs_error": 0.018537298548166048,
+      "outside_score_range": 0
+    }
+  ],
+  "interpretation": "Exact numerical checks corroborate the identities for this family, not a proof over all admissible laws. Mean error and RMSE average over random populations as well as random samples. Raw plug-in estimates are not clipped. Observationally identical alternatives verify nonidentification of the complete joint law; negative controls violate Markov and are not primary simulation data."
+}
