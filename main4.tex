@@ -1,0 +1,371 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{CJKutf8}
+  % CJKutf8 supplies its own Unicode map for each Chinese subfont.
+  \makeatletter
+  \AddToHook{cmd/CJK@addcmap/before}{\pdfnobuiltintounicode\font@name}
+  \makeatother
+\else
+  \usepackage[no-math]{fontspec}
+  \IfFontExistsTF{Noto Serif CJK SC}{
+    \setmainfont{Noto Serif CJK SC}
+    \setsansfont{Noto Sans CJK SC}
+  }{
+    \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+    \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  }
+  \ifXeTeX
+    \XeTeXlinebreaklocale "zh"
+    \XeTeXlinebreakskip=0pt plus 0.5pt
+  \fi
+\fi
+\pagestyle{plain}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{3pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+% Use a single stroke for Chinese headings when pdfLaTeX has no bold CJK font.
+\newcommand{\headingweight}{\ifPDFTeX\mdseries\else\bfseries\fi}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\headingweight}}
+\makeatother
+
+\newcommand{\indep}{\mathrel{\perp\!\!\!\perp}}
+\begin{document}
+\ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
+\begin{center}
+{\LARGE\headingweight 两个暴露的有序结局 Shapley 归因}\\[5pt]
+{\large 单步增量与 Markov 条件下的识别}
+\end{center}
+
+\section{要分配的责任是什么}
+设 $X_1,X_2\in\{0,1\}$，结局 $Y\in\{0,1,2\}$，分别表示小、中、大。
+每升一级计 $1$ 分；这里分配的是等级分数。四个潜在结果的含义为
+\begin{center}
+\renewcommand{\arraystretch}{1.17}
+\begin{tabular}{@{}c c c@{}}
+\toprule
+暴露组合 $(X_1,X_2)$ & 潜在结果 & 集合记号\\
+\midrule
+$(0,0)$ & $Y_{00}$ & $Y(\varnothing)$\\
+$(1,0)$ & $Y_{10}$ & $Y(\{1\})$\\
+$(0,1)$ & $Y_{01}$ & $Y(\{2\})$\\
+$(1,1)$ & $Y_{11}$ & $Y(\{1,2\})$\\
+\bottomrule
+\end{tabular}
+\end{center}
+个体类型按 $T=(Y_{00},Y_{01},Y_{10},Y_{11})$ 排列。定义
+\[
+\mathcal E_1=\{X_1=X_2=1,Y=1\},\qquad
+\mathcal E_2=\{X_1=X_2=1,Y=2\}.
+\]
+由一致性，在 $\mathcal E_2$ 中 $Y_{11}=2$。这 $2$ 分由无暴露时已有的 $Y_{00}$ 分，
+以及两个暴露带来的 $2-Y_{00}$ 分组成。
+
+\medskip
+\noindent{\headingweight 给定类型的责任。}
+Shapley 规则对两种加入顺序各取一半权重。
+\begin{center}
+\renewcommand{\arraystretch}{1.22}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+加入顺序 & 潜在结果路径 & $X_1$ 的增量 & $X_2$ 的增量\\
+\midrule
+先 $X_1$，后 $X_2$ & $Y_{00}\to Y_{10}\to Y_{11}$
+ & $Y_{10}-Y_{00}$ & $Y_{11}-Y_{10}$\\
+先 $X_2$，后 $X_1$ & $Y_{00}\to Y_{01}\to Y_{11}$
+ & $Y_{11}-Y_{01}$ & $Y_{01}-Y_{00}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+对给定 $T=t$，将各潜在结果取为 $t$ 中对应的值，定义
+\begin{equation}
+\begin{aligned}
+R(1\mid t,\mathcal E_2)&=\tfrac12\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\},\\
+R(2\mid t,\mathcal E_2)&=\tfrac12\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\},\\
+R(\varnothing\mid t,\mathcal E_2)&=Y_{00}.
+\end{aligned}
+\label{eq:individual}
+\end{equation}
+三项合计为 $Y_{11}=2$。在 $\mathcal E_1$ 中使用同一规则，三项合计为 $1$。
+
+\medskip
+\noindent{\headingweight 病例中的平均责任。}
+例如，对 $j=1,2,\varnothing$，
+\[
+\mathcal R_j(\mathcal E_2)
+=\sum_{t:\,t_{11}=2}R(j\mid t,\mathcal E_2)\,
+  \mathrm{pr}(T=t\mid\mathcal E_2).
+\]
+识别的目标是这个条件平均值。以下假设一致性成立，联合暴露 $(X_1,X_2)$ 与 $T$ 独立，
+四个暴露组均有正概率，且所讨论的病例事件发生概率为正。
+于是条件事件 $\mathcal E_2$ 可替换为 $Y_{11}=2$；$\mathcal E_1$ 同理。
+
+\clearpage
+\section{需要增加哪两个条件}
+\noindent{\headingweight 条件一：每加入一个暴露，结局最多升一级。}
+要求同一个体的四个潜在结果满足
+\begin{equation}
+\begin{aligned}
+0\le Y_{10}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{10}\le1,\\
+0\le Y_{01}-Y_{00}\le1,\qquad&0\le Y_{11}-Y_{01}\le1.
+\end{aligned}
+\label{eq:unit}
+\end{equation}
+这允许两个暴露合起来升两级。例如 $T=0112$ 对应两条路径均为 $0\to1\to2$。
+
+\medskip
+\noindent{\headingweight 条件二：给定中间等级，最终等级与起始等级条件独立。}
+对两种加入顺序，分别写为
+\begin{equation}
+\begin{aligned}
+Y_{11}\indep Y_{00}\mid Y_{10},&\qquad
+    \text{对应 }Y_{00}\to Y_{10}\to Y_{11},\\
+Y_{11}\indep Y_{00}\mid Y_{01},&\qquad
+    \text{对应 }Y_{00}\to Y_{01}\to Y_{11}.
+\end{aligned}
+\label{eq:markov}
+\end{equation}
+第一条的含义是：在 $Y_{10}=b$ 的人中，知道 $Y_{00}=a$ 不再改变 $Y_{11}$ 的条件分布，
+即在条件事件概率为正时，
+\[
+\mathrm{pr}(Y_{11}=c\mid Y_{10}=b,Y_{00}=a)
+=\mathrm{pr}(Y_{11}=c\mid Y_{10}=b).
+\]
+第二条将 $Y_{10}$ 换成 $Y_{01}$。这些是跨潜在结果的额外假设，随机分配本身不蕴含它们。
+路径表示计算 Shapley 值时的加入顺序，不表示实际随访时间。
+
+集合条件 $Y(S\cup\{j\})\indep Y(A)\mid Y(S)$ 在 $p=2$ 时恰好给出式~\eqref{eq:markov}：
+取 $A=\varnothing$，再分别取 $(S,j)=(\{1\},2)$ 和 $(\{2\},1)$。
+此时每条路径只有三个潜在结果，所以条件独立就是该路径的 Markov 条件。
+
+\section{第一步：恢复相邻两个潜在结果的联合分布}
+设 $U,V\in\{0,1,2\}$ 满足 $0\le V-U\le1$。
+联合取值只可能是 $(0,0),(0,1),(1,1),(1,2),(2,2)$。
+五个联合概率都由 $U,V$ 各自的分布确定：
+\begin{center}
+\renewcommand{\arraystretch}{1.40}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+ & $V=0$ & $V=1$ & $V=2$\\
+\midrule
+$U=0$ & $\mathrm{pr}(V=0)$
+ & $\mathrm{pr}(U=0)-\mathrm{pr}(V=0)$ & $0$\\
+$U=1$ & $0$
+ & $1-\mathrm{pr}(V=2)-\mathrm{pr}(U=0)$
+ & $\mathrm{pr}(V=2)-\mathrm{pr}(U=2)$\\
+$U=2$ & $0$ & $0$ & $\mathrm{pr}(U=2)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+例如，$U=0$ 的人只能停在 $0$ 或升至 $1$；其中停在 $0$ 的概率就是 $\mathrm{pr}(V=0)$，
+相减便得到从 $0$ 升至 $1$ 的概率。从 $1$ 升至 $2$ 的概率同理。
+
+将表分别用于 $(Y_{00},Y_{10})$、$(Y_{10},Y_{11})$、$(Y_{00},Y_{01})$、
+$(Y_{01},Y_{11})$，便恢复四对相邻联合分布。
+各潜在结果的边际概率由相应随机暴露组的结局比例识别。
+
+\clearpage
+\section{第二步：恢复无暴露与双暴露的联合分布}
+第一步已经给出 $Y_{10}$ 与 $Y_{11}$、$Y_{01}$ 与 $Y_{11}$ 的联合分布。
+还缺的是 $Y_{00}$ 与 $Y_{11}$ 的联合分布，因为两者相隔两步。
+沿 $Y_{00}\to Y_{10}\to Y_{11}$ 使用第一条 Markov 条件。当 $\mathrm{pr}(Y_{10}=b)>0$ 时，
+\begin{equation}
+\begin{aligned}
+&\mathrm{pr}(Y_{00}=a,Y_{10}=b,Y_{11}=c)\\
+&\quad=\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+       \mathrm{pr}(Y_{11}=c\mid Y_{00}=a,Y_{10}=b)\\
+&\quad=\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+       \mathrm{pr}(Y_{11}=c\mid Y_{10}=b)\\
+&\quad=\frac{\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+             \mathrm{pr}(Y_{10}=b,Y_{11}=c)}
+            {\mathrm{pr}(Y_{10}=b)}.
+\end{aligned}
+\label{eq:triple}
+\end{equation}
+中间那个等号正是 Markov 条件发挥作用的地方。
+对 $b=0,1,2$ 求和，得到
+\begin{equation}
+\mathrm{pr}(Y_{00}=a,Y_{11}=c)
+=\sum_{b:\,\mathrm{pr}(Y_{10}=b)>0}
+\frac{\mathrm{pr}(Y_{00}=a,Y_{10}=b)\,
+      \mathrm{pr}(Y_{10}=b,Y_{11}=c)}
+     {\mathrm{pr}(Y_{10}=b)}.
+\label{eq:endpoints}
+\end{equation}
+分母为零的层对联合概率贡献为零，故不进入求和。
+
+\medskip
+\noindent{\headingweight 对二级病例，最关键的是从 $0$ 到 $2$ 的概率。}
+记
+\[
+\xi_{ab}=\mathrm{pr}(Y_{ab}=2),\qquad
+\theta=\mathrm{pr}(Y_{00}=0,Y_{11}=2).
+\]
+在条件~\eqref{eq:unit} 下，$Y_{00}=0,Y_{11}=2$ 强制两条路径的中间值均为 $1$，因此
+\[
+\{Y_{00}=0,Y_{11}=2\}=\{T=0112\}.
+\]
+于是式~\eqref{eq:endpoints} 在 $a=0,c=2$ 时只剩 $b=1$ 这一项：
+\[
+\theta=
+\frac{\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
+      \mathrm{pr}(Y_{10}=1,Y_{11}=2)}
+     {\mathrm{pr}(Y_{10}=1)}.
+\]
+第一步的表给出
+\[
+\begin{aligned}
+\mathrm{pr}(Y_{00}=0,Y_{10}=1)
+ &=\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0),\\
+\mathrm{pr}(Y_{10}=1,Y_{11}=2)&=\xi_{11}-\xi_{10}.
+\end{aligned}
+\]
+所以当 $\mathrm{pr}(Y_{10}=1)>0$ 时，
+\begin{equation}
+\theta=
+\frac{\{\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)\}
+      (\xi_{11}-\xi_{10})}
+     {\mathrm{pr}(Y_{10}=1)}.
+\label{eq:theta}
+\end{equation}
+若 $\mathrm{pr}(Y_{10}=1)=0$，则 $\theta=0$。
+式~\eqref{eq:theta} 右侧全部是可由四个随机暴露组识别的边际概率。
+
+\clearpage
+\section{第三步：计算二级病例的责任}
+在单步增量条件下，$\mathcal E_2$ 只允许以下六种类型。两项暴露责任仍按式~\eqref{eq:individual}
+计算，并未改变原来的 Shapley 规则。
+\begin{center}
+\renewcommand{\arraystretch}{1.28}
+\setlength{\tabcolsep}{14pt}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+类型 $t$ & $R(1\mid t,\mathcal E_2)$ & $R(2\mid t,\mathcal E_2)$
+ & $R(\varnothing\mid t,\mathcal E_2)$\\
+\midrule
+$0112$ & $1$ & $1$ & $0$\\
+$1112$ & $1/2$ & $1/2$ & $1$\\
+$1122$ & $1$ & $0$ & $1$\\
+$1212$ & $0$ & $1$ & $1$\\
+$1222$ & $1/2$ & $1/2$ & $1$\\
+$2222$ & $0$ & $0$ & $2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+为了求这些行的加权平均，只需要三个条件均值。
+当 $Y_{11}=2$ 时，由单步增量限制，$Y_{10}$ 只能是 $1$ 或 $2$。
+其中取 $2$ 的条件概率为 $\xi_{10}/\xi_{11}$，所以
+\[
+\mathrm E(Y_{10}\mid Y_{11}=2)=1+\frac{\xi_{10}}{\xi_{11}},
+\qquad
+\mathrm E(Y_{01}\mid Y_{11}=2)=1+\frac{\xi_{01}}{\xi_{11}}.
+\]
+背景 $Y_{00}$ 在二级病例中的条件分布为
+\[
+\begin{aligned}
+\mathrm{pr}(Y_{00}=0\mid Y_{11}=2)&=\frac{\theta}{\xi_{11}},\\
+\mathrm{pr}(Y_{00}=1\mid Y_{11}=2)&=\frac{\xi_{11}-\theta-\xi_{00}}{\xi_{11}},\\
+\mathrm{pr}(Y_{00}=2\mid Y_{11}=2)&=\frac{\xi_{00}}{\xi_{11}}.
+\end{aligned}
+\]
+因此 $\mathrm E(Y_{00}\mid Y_{11}=2)=(\xi_{11}+\xi_{00}-\theta)/\xi_{11}$。
+
+\medskip
+\noindent{\headingweight 代入原始 Shapley 公式。}
+例如，
+\[
+\mathcal R_1(\mathcal E_2)
+=\tfrac12\{\mathrm E(Y_{10}\mid Y_{11}=2)-\mathrm E(Y_{00}\mid Y_{11}=2)
+             +2-\mathrm E(Y_{01}\mid Y_{11}=2)\}.
+\]
+将三个条件均值代入并化简，得到
+\begin{equation}
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
+\mathcal R_2(\mathcal E_2)
+ &=\frac{\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta}{2\xi_{11}},\\[3pt]
+\mathcal R_{\varnothing}(\mathcal E_2)
+ &=\frac{\xi_{11}+\xi_{00}-\theta}{\xi_{11}}.
+\end{aligned}
+\label{eq:result}
+\end{equation}
+这三项均可点识别，合计为 $2$。其中 $\xi_{ab}$ 直接来自各组的二级结局比例，
+$\theta$ 由式~\eqref{eq:theta} 识别。证明不要求先识别每一种类型的条件概率。
+
+\clearpage
+\section{一个从观测分布算到责任的例子}
+假设四个随机暴露组的结局分布如下。
+\begin{center}
+\renewcommand{\arraystretch}{1.20}
+\setlength{\tabcolsep}{17pt}
+\begin{tabular}{@{}c c c c@{}}
+\toprule
+暴露组合 & $Y=0$ & $Y=1$ & $Y=2$\\
+\midrule
+$(0,0)$ & $1/2$ & $1/2$ & $0$\\
+$(1,0)$ & $0$ & $1$ & $0$\\
+$(0,1)$ & $0$ & $1$ & $0$\\
+$(1,1)$ & $0$ & $1/2$ & $1/2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+于是 $\xi_{00}=\xi_{10}=\xi_{01}=0$，$\xi_{11}=1/2$。
+因为 $Y_{10}=Y_{01}=1$，Markov 条件在本例中要求 $Y_{00}$ 与 $Y_{11}$ 独立。
+按式~\eqref{eq:theta}，
+\[
+\theta=\frac{(1/2-0)(1/2-0)}{1}=\frac14.
+\]
+代入式~\eqref{eq:result}，
+\[
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)&=\frac{1/2+1/4}{2(1/2)}=\frac34,\\
+\mathcal R_2(\mathcal E_2)&=\frac{1/2+1/4}{2(1/2)}=\frac34,\\
+\mathcal R_{\varnothing}(\mathcal E_2)&=\frac{1/2-1/4}{1/2}=\frac12.
+\end{aligned}
+\]
+即二级病例的 $2$ 分中，两个暴露各贡献 $0.75$ 分，背景贡献 $0.5$ 分。
+
+本例中，四种类型 $0111,0112,1111,1112$ 各占总体的 $1/4$。
+因此二级病例仅包含以下两种类型，直接加权得到相同结果。
+\begin{center}
+\renewcommand{\arraystretch}{1.23}
+\setlength{\tabcolsep}{13pt}
+\begin{tabular}{@{}c c c c c@{}}
+\toprule
+类型 $t$ & $\mathrm{pr}(T=t\mid\mathcal E_2)$ & $X_1$ 责任 & $X_2$ 责任 & 背景责任\\
+\midrule
+$0112$ & $1/2$ & $1$ & $1$ & $0$\\
+$1112$ & $1/2$ & $1/2$ & $1/2$ & $1$\\
+\midrule
+加权平均 & & $3/4$ & $3/4$ & $1/2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent{\headingweight 观测到一级时。}
+将式~\eqref{eq:endpoints} 中的 $c$ 取为 $1$，结合已识别的相邻联合分布，
+即可得到 $\mathrm E(Y_{00}\mid Y_{11}=1)$、$\mathrm E(Y_{10}\mid Y_{11}=1)$
+和 $\mathrm E(Y_{01}\mid Y_{11}=1)$。代入同一 Shapley 公式即可识别 $\mathcal E_1$ 下的责任。
+在本例中，一级病例由 $0111,1111$ 各占一半组成，
+故两个暴露各贡献 $1/4$ 分，背景贡献 $1/2$ 分，合计为 $1$。
+
+\medskip
+\noindent{\headingweight 两条路径的使用范围。}
+对 $p=2$，四条单步增量限制加上第一条 Markov 条件，已经足以完成上述识别。
+若同时要求第二条，则将式~\eqref{eq:endpoints} 中的 $Y_{10}$ 全部换成 $Y_{01}$，
+对每个 $a,c$ 必须得到同一个端点联合概率。
+这些一致性等式是模型的必要限制；本结果以两条条件在同一个联合分布中共同成立为前提。
+
+\ifPDFTeX\end{CJK*}\fi
+\end{document}
