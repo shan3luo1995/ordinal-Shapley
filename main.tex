@@ -1,6 +1,6 @@
-\documentclass[12pt,a4paper,fleqn]{article}
-\usepackage[left=20mm,right=20mm,top=18mm,bottom=18mm,includefoot]{geometry}
-\usepackage{amsmath,xcolor}
+\documentclass[11pt,a4paper]{article}
+\usepackage[left=24mm,right=24mm,top=22mm,bottom=20mm,includefoot]{geometry}
+\usepackage{amsmath}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage{CJKutf8}
@@ -17,87 +17,138 @@
     \setmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
     \setsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
   }
+  \newfontfamily{\referencefont}{lmroman10-regular.otf}[ItalicFont=lmroman10-italic.otf]
   \ifXeTeX
     \XeTeXlinebreaklocale "zh"
     \XeTeXlinebreakskip=0pt plus 0.5pt
   \fi
 \fi
 \pagestyle{plain}
-\DeclareMathSizes{12}{12}{9}{7}
-\setlength{\parindent}{0pt}
-\setlength{\mathindent}{0.65em}
-\setlength{\parskip}{5pt}
-\definecolor{accent}{HTML}{24545C}
-\newcommand{\caseheading}[1]{\par\addvspace{6pt}{\sffamily\bfseries\large\color{accent}#1 个暴露}\par\nobreak\vspace{-4pt}}
+\raggedbottom
+\linespread{1.13}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{2pt plus 1pt}
+\setlength{\jot}{3pt}
+\DeclareMathSizes{10.95}{10.95}{9}{7}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}
+  {2.0ex plus .3ex minus .2ex}{.9ex}{\normalfont\large\bfseries}}
+\makeatother
+\renewcommand{\refname}{参考文献}
+
 \begin{document}
 \ifPDFTeX\begin{CJK*}{UTF8}{gbsn}\fi
-{\sffamily\bfseries\LARGE 多个暴露对已发生结局的 Shapley 责任}\par
-观测到 $X_1=\cdots=X_p=1$ 且 $Y=1$，记这一事实为 $E$。用 $Y_{a_1\cdots a_p}=Y(a_1,\ldots,a_p)$ 表示将各暴露分别设为 $a_1,\ldots,a_p$ 时的潜在结果。下标从左到右对应 $X_1,\ldots,X_p$，例如 $Y_{101}=Y(1,0,1)$。
+\begin{center}
+  {\LARGE\bfseries 多个暴露对已发生结局的\,Shapley\,责任}
+\end{center}
 
-计算 $X_1$ 的责任 $r_1$ 时，每一项都只把下标的第一位从 0 改为 1。若其余下标恰有 $k$ 个 1，则这一项的 Shapley 权重为 $k!(p-1-k)!/p!$。这是在全部 $p!$ 种等可能的排列中，这 $k$ 个暴露恰好都在 $X_1$ 之前、其余暴露都在它之后的概率。
-\setlength{\abovedisplayskip}{4pt}
-\setlength{\belowdisplayskip}{4pt}
-\setlength{\abovedisplayshortskip}{3pt}
-\setlength{\belowdisplayshortskip}{3pt}
-\setlength{\jot}{3pt}
+\section{潜在结果与责任分配}
+观测到\,$X_1=\cdots=X_p=1$\,且\,$Y=1$，记这一事实为\,$E$。
+用\,$Y_{a_1\cdots a_p}=Y(a_1,\ldots,a_p)$\,表示将各暴露分别设为\,$a_1,\ldots,a_p$\,时的潜在结果。
+下标从左到右对应\,$X_1,\ldots,X_p$，例如\,$Y_{101}=Y(1,0,1)$。
 
-\caseheading{两}
-\begin{align*}
-r_1 &= \frac{1}{2}(Y_{10}-Y_{00})+\frac{1}{2}(Y_{11}-Y_{01}) .
-\end{align*}
+计算\,$X_1$\,的责任\,$r_1$\,时，每一项都只把下标的第一位从 0 改为 1。
+根据 Shapley 的定义\cite{shapley}，若其余下标中恰有\,$k$\,个 1，则这一项的权重为
+\[
+  \frac{k!\,(p-1-k)!}{p!}.
+\]
+分子中的\,$k!$\,对应排在\,$X_1$\,之前的\,$k$\,个暴露的排列数，$(p-1-k)!$\,对应排在其后的暴露的排列数。
+求\,$r_j$\,时，对调每个潜在结果下标的第 1 位和第\,$j$\,位即可。若加入任何一个暴露都不会使结局从 1 变为 0，则\,$r_j$\,等于随机排列中第\,$j$\,个暴露使结局从 0 变为 1 的概率。
 
-\caseheading{三}
-\begin{align*}
-r_1 &= \frac{1}{3}(Y_{100}-Y_{000}) \\[2pt]
- &\quad +\frac{1}{6}\bigl[(Y_{110}-Y_{010})+(Y_{101}-Y_{001})\bigr] \\[2pt]
- &\quad +\frac{1}{3}(Y_{111}-Y_{011}) .
-\end{align*}
+背景责任为\,$r_0=Y_{0\cdots0}$。由一致性，在\,$E$\,下有\,$Y_{1\cdots1}=1$，故
+\[
+  r_0+r_1+\cdots+r_p=1 .
+\]
+依反事实归因的定义\cite{luo}，病例组的平均责任为\,$R_j(E)=\mathrm{E}[r_j\mid E]$。
+若原始结局\,$O$\,有三级且 3 级最严重，可取
+$Y_{a_1\cdots a_p}=\mathbf{1}\{O_{a_1\cdots a_p}=3\}$，分配发生 3 级结局的责任。
 
-\caseheading{四}
-\begin{align*}
-r_1 &= \frac{1}{4}(Y_{1000}-Y_{0000}) \\[2pt]
- &\quad +\frac{1}{12}\bigl[(Y_{1100}-Y_{0100})+(Y_{1010}-Y_{0010})+(Y_{1001}-Y_{0001})\bigr] \\[2pt]
- &\quad +\frac{1}{12}\bigl[(Y_{1110}-Y_{0110})+(Y_{1101}-Y_{0101})+(Y_{1011}-Y_{0011})\bigr] \\[2pt]
- &\quad +\frac{1}{4}(Y_{1111}-Y_{0111}) .
-\end{align*}
+\section{两个至四个暴露}
+当\,$p=2$\,时，两种暴露顺序各占一半，因而
+\begin{equation}\label{eq:p2}
+r_1 = \tfrac{1}{2}(Y_{10}-Y_{00})+\tfrac{1}{2}(Y_{11}-Y_{01}).
+\end{equation}
 
-\caseheading{五}
-\begin{align*}
-r_1 &= \frac{1}{5}(Y_{10000}-Y_{00000}) \\[2pt]
- &\quad +\frac{1}{20}\bigl[(Y_{11000}-Y_{01000})+(Y_{10100}-Y_{00100})+(Y_{10010}-Y_{00010})+(Y_{10001}-Y_{00001})\bigr] \\[2pt]
- &\quad +\frac{1}{30}\bigl[(Y_{11100}-Y_{01100})+(Y_{11010}-Y_{01010})+(Y_{11001}-Y_{01001}) \\
- &\qquad\qquad {}+(Y_{10110}-Y_{00110})+(Y_{10101}-Y_{00101})+(Y_{10011}-Y_{00011})\bigr] \\[2pt]
- &\quad +\frac{1}{20}\bigl[(Y_{11110}-Y_{01110})+(Y_{11101}-Y_{01101})+(Y_{11011}-Y_{01011})+(Y_{10111}-Y_{00111})\bigr] \\[2pt]
- &\quad +\frac{1}{5}(Y_{11111}-Y_{01111}) .
-\end{align*}
+当\,$p=3$\,时，按\,$X_2$\,和\,$X_3$\,均为 0、仅一个为 1、两者均为 1 分组，得到
+\begin{equation}\label{eq:p3}
+\begin{split}
+r_1 &= \tfrac{1}{3}(Y_{100}-Y_{000}) \\[2pt]
+    &\quad + \tfrac{1}{6}\bigl[(Y_{110}-Y_{010})+(Y_{101}-Y_{001})\bigr] \\[2pt]
+    &\quad + \tfrac{1}{3}(Y_{111}-Y_{011}).
+\end{split}
+\end{equation}
+
+当\,$p=4$\,时，其余三位下标有八种取值组合。按其中 1 的个数分组，有
+\begin{equation}\label{eq:p4}
+\begin{split}
+r_1 &= \tfrac{1}{4}(Y_{1000}-Y_{0000}) \\[2pt]
+    &\quad + \tfrac{1}{12}\bigl[(Y_{1100}-Y_{0100})+(Y_{1010}-Y_{0010})+(Y_{1001}-Y_{0001})\bigr] \\[2pt]
+    &\quad + \tfrac{1}{12}\bigl[(Y_{1110}-Y_{0110})+(Y_{1101}-Y_{0101})+(Y_{1011}-Y_{0011})\bigr] \\[2pt]
+    &\quad + \tfrac{1}{4}(Y_{1111}-Y_{0111}).
+\end{split}
+\end{equation}
 
 \newpage
-\setlength{\jot}{6pt}
-\caseheading{六}
-其余五个暴露共有 32 种取值组合。下式按这五位下标中 1 的个数从 0 到 5 分组，每组中各项的权重相同。
-\begin{align*}
-r_1 &= \frac{1}{6}(Y_{100000}-Y_{000000}) \\[6pt]
- &\quad +\frac{1}{30}\bigl[(Y_{110000}-Y_{010000})+(Y_{101000}-Y_{001000})+(Y_{100100}-Y_{000100}) \\
- &\qquad\qquad {}+(Y_{100010}-Y_{000010})+(Y_{100001}-Y_{000001})\bigr] \\[6pt]
- &\quad +\frac{1}{60}\bigl[(Y_{111000}-Y_{011000})+(Y_{110100}-Y_{010100})+(Y_{110010}-Y_{010010}) \\
- &\qquad\qquad {}+(Y_{110001}-Y_{010001})+(Y_{101100}-Y_{001100})+(Y_{101010}-Y_{001010}) \\
- &\qquad\qquad {}+(Y_{101001}-Y_{001001})+(Y_{100110}-Y_{000110}) \\
- &\qquad\qquad {}+(Y_{100101}-Y_{000101})+(Y_{100011}-Y_{000011})\bigr] \\[6pt]
- &\quad +\frac{1}{60}\bigl[(Y_{111100}-Y_{011100})+(Y_{111010}-Y_{011010})+(Y_{111001}-Y_{011001}) \\
- &\qquad\qquad {}+(Y_{110110}-Y_{010110})+(Y_{110101}-Y_{010101})+(Y_{110011}-Y_{010011}) \\
- &\qquad\qquad {}+(Y_{101110}-Y_{001110})+(Y_{101101}-Y_{001101}) \\
- &\qquad\qquad {}+(Y_{101011}-Y_{001011})+(Y_{100111}-Y_{000111})\bigr] \\[6pt]
- &\quad +\frac{1}{30}\bigl[(Y_{111110}-Y_{011110})+(Y_{111101}-Y_{011101})+(Y_{111011}-Y_{011011}) \\
- &\qquad\qquad {}+(Y_{110111}-Y_{010111})+(Y_{101111}-Y_{001111})\bigr] \\[6pt]
- &\quad +\frac{1}{6}(Y_{111111}-Y_{011111}) .
-\end{align*}
+\section{五个和六个暴露}
+当\,$p=5$\,时，其余四个暴露共有 16 种取值组合，$X_1$\,的责任展开为
+\begin{equation}\label{eq:p5}
+\begin{split}
+r_1 &= \tfrac{1}{5}(Y_{10000}-Y_{00000}) \\[2pt]
+    &\quad + \tfrac{1}{20}\left[\begin{aligned}
+        &(Y_{11000}-Y_{01000})+(Y_{10100}-Y_{00100}) \\
+        &{}+(Y_{10010}-Y_{00010})+(Y_{10001}-Y_{00001})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{30}\left[\begin{aligned}
+        &(Y_{11100}-Y_{01100})+(Y_{11010}-Y_{01010})+(Y_{11001}-Y_{01001}) \\
+        &{}+(Y_{10110}-Y_{00110})+(Y_{10101}-Y_{00101})+(Y_{10011}-Y_{00011})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{20}\left[\begin{aligned}
+        &(Y_{11110}-Y_{01110})+(Y_{11101}-Y_{01101}) \\
+        &{}+(Y_{11011}-Y_{01011})+(Y_{10111}-Y_{00111})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{5}(Y_{11111}-Y_{01111}).
+\end{split}
+\end{equation}
 
-例如，$Y_{111000}-Y_{011000}$ 这一项对应 $X_2$ 和 $X_3$ 排在 $X_1$ 之前，$X_4,X_5,X_6$ 排在其后。前两个暴露有 $2!$ 种顺序，后三个有 $3!$ 种，因此权重为 $2!3!/6!=1/60$。
-\par\smallskip
-求 $r_j$ 时，对调每个潜在结果下标的第 1 位和第 $j$ 位即可。若加入任何一个暴露都不会使结局从 1 变为 0，则 $r_j$ 等于随机排列中第 $j$ 个暴露使结局从 0 变为 1 的概率。
+当\,$p=6$\,时，其余五个暴露共有 32 种取值组合。下式按这五位下标中 1 的个数从 0 到 5 分组，每组中各项的权重相同。
+\begin{equation}\label{eq:p6}
+\begin{split}
+r_1 &= \tfrac{1}{6}(Y_{100000}-Y_{000000}) \\[2pt]
+    &\quad + \tfrac{1}{30}\left[\begin{aligned}
+        &(Y_{110000}-Y_{010000})+(Y_{101000}-Y_{001000})+(Y_{100100}-Y_{000100}) \\
+        &{}+(Y_{100010}-Y_{000010})+(Y_{100001}-Y_{000001})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{60}\left[\begin{aligned}
+        &(Y_{111000}-Y_{011000})+(Y_{110100}-Y_{010100})+(Y_{110010}-Y_{010010}) \\
+        &{}+(Y_{110001}-Y_{010001})+(Y_{101100}-Y_{001100})+(Y_{101010}-Y_{001010}) \\
+        &{}+(Y_{101001}-Y_{001001})+(Y_{100110}-Y_{000110}) \\
+        &{}+(Y_{100101}-Y_{000101})+(Y_{100011}-Y_{000011})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{60}\left[\begin{aligned}
+        &(Y_{111100}-Y_{011100})+(Y_{111010}-Y_{011010})+(Y_{111001}-Y_{011001}) \\
+        &{}+(Y_{110110}-Y_{010110})+(Y_{110101}-Y_{010101})+(Y_{110011}-Y_{010011}) \\
+        &{}+(Y_{101110}-Y_{001110})+(Y_{101101}-Y_{001101}) \\
+        &{}+(Y_{101011}-Y_{001011})+(Y_{100111}-Y_{000111})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{30}\left[\begin{aligned}
+        &(Y_{111110}-Y_{011110})+(Y_{111101}-Y_{011101})+(Y_{111011}-Y_{011011}) \\
+        &{}+(Y_{110111}-Y_{010111})+(Y_{101111}-Y_{001111})
+      \end{aligned}\right] \\[2pt]
+    &\quad + \tfrac{1}{6}(Y_{111111}-Y_{011111}).
+\end{split}
+\end{equation}
+例如，式~\eqref{eq:p6} 中的\,$Y_{111000}-Y_{011000}$\,对应\,$X_2$\,和\,$X_3$\,排在\,$X_1$\,之前，$X_4,X_5,X_6$\,排在其后。前两个暴露有\,$2!$\,种顺序，后三个有\,$3!$\,种，因此权重为\,$2!3!/6!=1/60$。
 
-背景责任为 $r_0=Y_{0\cdots0}$。由一致性，在 $E$ 下有 $Y_{1\cdots1}=1$，故 $r_0+r_1+\cdots+r_p=1$。病例组的平均责任为 $R_j(E)=\mathrm{E}[r_j\mid E]$。若原始结局 $O$ 有三级且 3 级最严重，可取 $Y_{a_1\cdots a_p}=\mathbf{1}\{O_{a_1\cdots a_p}=3\}$，分配发生 3 级结局的责任。
-\vfill
-{\footnotesize\color{accent} Shapley (1953), \textit{A Value for $n$-Person Games}. \quad Luo, Deng, Zhao \& Geng (2026), arXiv:2606.18459.}
+\begin{thebibliography}{9}
+\ifPDFTeX\else\referencefont\fi
+\small
+\setlength{\itemsep}{2pt}
+\bibitem{shapley} Shapley, L. S. (1953).
+A value for $n$-person games.
+In \textit{Contributions to the Theory of Games}, vol.~II, pp.~307--317. Princeton University Press.
+\bibitem{luo} Luo, S., Deng, Y., Zhao, Q. and Geng, Z. (2026).
+Apportioning causal responsibility of two risk factors for an adverse outcome via counterfactual attribution.
+arXiv:2606.18459.
+\end{thebibliography}
 \ifPDFTeX\end{CJK*}\fi
 \end{document}
