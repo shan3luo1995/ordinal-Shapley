@@ -177,16 +177,50 @@ $\mathcal R_j(\mathcal E_1)$ 和 $\mathcal R_j(\mathcal E_2)$
 
 \clearpage
 \section{证明}
-由假设~\ref{ass:observed}，四个潜在结果的边际分布分别由四个暴露组的结局分布识别，
-且式~\eqref{eq:target} 中的条件事件 $\mathcal E_1,\mathcal E_2$
-分别可替换为 $Y_{11}=1,Y_{11}=2$。
-
-假设~\ref{ass:unit} 给出
+由假设~\ref{ass:observed}，四个潜在结果的边际分布分别由四个暴露组的结局分布识别。
+一致性与联合随机分配还给出
 \[
-\{Y_{00}=0,Y_{11}=2\}
-=\{Y_{00}=0,Y_{01}=1,Y_{10}=1,Y_{11}=2\},
+\begin{aligned}
+\mathrm{pr}(T=t\mid\mathcal E_2)
+ &=\frac{\mathrm{pr}(T=t,X_1=X_2=1,Y_{11}=2)}
+         {\mathrm{pr}(X_1=X_2=1,Y_{11}=2)}\\
+ &=\frac{\mathrm{pr}(T=t,Y_{11}=2)}{\mathrm{pr}(Y_{11}=2)}
+ =\mathrm{pr}(T=t\mid Y_{11}=2).
+\end{aligned}
 \]
-以及
+$\mathcal E_1$ 同理。因此，式~\eqref{eq:target} 中的类型加权平均，
+分别等于式~\eqref{eq:responsibility} 右侧给定 $Y_{11}=1$ 或 $Y_{11}=2$ 的条件期望。
+
+假设~\ref{ass:unit} 蕴含
+\[
+Y_{11}-1\le Y_{10}\le Y_{00}+1,\qquad
+Y_{11}-1\le Y_{01}\le Y_{00}+1.
+\]
+当 $Y_{00}=0,Y_{11}=2$ 时，上述上下界均为 $1$，
+故 $Y_{10}=Y_{01}=1$，从而
+\begin{equation}
+\theta=\mathrm{pr}(Y_{00}=0,Y_{10}=1,Y_{11}=2).
+\label{eq:theta-event}
+\end{equation}
+
+由 $0\le Y_{10}-Y_{00}\le1$，在 $Y_{00}=0$ 时，$Y_{10}$ 只可能取 $0,1$；
+而 $Y_{10}=0$ 必有 $Y_{00}=0$。因此
+\[
+\begin{aligned}
+\mathrm{pr}(Y_{00}=0)
+ &=\mathrm{pr}(Y_{00}=0,Y_{10}=0)
+   +\mathrm{pr}(Y_{00}=0,Y_{10}=1)\\
+ &=\mathrm{pr}(Y_{10}=0)+\mathrm{pr}(Y_{00}=0,Y_{10}=1).
+\end{aligned}
+\]
+同理，$0\le Y_{11}-Y_{10}\le1$ 给出
+\[
+\xi_{11}
+=\mathrm{pr}(Y_{10}=1,Y_{11}=2)
+ +\mathrm{pr}(Y_{10}=2,Y_{11}=2)
+=\mathrm{pr}(Y_{10}=1,Y_{11}=2)+\xi_{10}.
+\]
+故
 \begin{equation}
 \begin{aligned}
 \mathrm{pr}(Y_{00}=0,Y_{10}=1)
@@ -196,46 +230,160 @@ $\mathcal R_j(\mathcal E_1)$ 和 $\mathcal R_j(\mathcal E_2)$
 \end{aligned}
 \label{eq:adjacent}
 \end{equation}
-当 $\mathrm{pr}(Y_{10}=1)>0$ 时，由假设~\ref{ass:markov}，
-\[
-\begin{aligned}
-\theta
- &=\mathrm{pr}(Y_{00}=0,Y_{10}=1,Y_{11}=2)\\
- &=\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
-      \mathrm{pr}(Y_{11}=2\mid Y_{10}=1)\\
- &=\frac{\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
-           \mathrm{pr}(Y_{10}=1,Y_{11}=2)}
-          {\mathrm{pr}(Y_{10}=1)}.
-\end{aligned}
-\]
-结合式~\eqref{eq:adjacent} 得到式~\eqref{eq:theta}。
-若 $\mathrm{pr}(Y_{10}=1)=0$，则 $\theta=0$。
+第三式由 $0\le Y_{11}-Y_{01}\le1$ 以相同方式得到。
 
-由单调性及式~\eqref{eq:adjacent}，
+当 $\mathrm{pr}(Y_{10}=1)>0$ 时，式~\eqref{eq:theta-event} 与假设~\ref{ass:markov} 给出
 \begin{equation}
 \begin{aligned}
-\mathrm E\{Y_{10}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{10},\\
-\mathrm E\{Y_{01}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{01},\\
-\mathrm E\{Y_{00}\mathbf1(Y_{11}=2)\}&=\xi_{11}+\xi_{00}-\theta.
+\theta
+ &=\mathrm{pr}(Y_{10}=1)\,
+   \mathrm{pr}(Y_{00}=0,Y_{11}=2\mid Y_{10}=1)\\
+ &\overset{\text{假设~\ref{ass:markov}}}{=}
+   \mathrm{pr}(Y_{10}=1)\,
+   \mathrm{pr}(Y_{00}=0\mid Y_{10}=1)\,
+   \mathrm{pr}(Y_{11}=2\mid Y_{10}=1)\\
+ &=\frac{\mathrm{pr}(Y_{00}=0,Y_{10}=1)\,
+           \mathrm{pr}(Y_{10}=1,Y_{11}=2)}
+          {\mathrm{pr}(Y_{10}=1)}\\
+ &=\frac{\{\mathrm{pr}(Y_{00}=0)-\mathrm{pr}(Y_{10}=0)\}
+           (\xi_{11}-\xi_{10})}
+          {\mathrm{pr}(Y_{10}=1)}.
 \end{aligned}
-\label{eq:truncated}
+\label{eq:theta-factor}
 \end{equation}
-第三式利用了
+若 $\mathrm{pr}(Y_{10}=1)=0$，由式~\eqref{eq:theta-event} 有 $\theta=0$。
+这证明了式~\eqref{eq:theta}。
+
+\clearpage
+由单调性，$\mathrm{pr}(Y_{10}=2,Y_{11}=2)=\xi_{10}$，
+$\mathrm{pr}(Y_{01}=2,Y_{11}=2)=\xi_{01}$。结合式~\eqref{eq:adjacent}，
+\begin{equation}
+\begin{aligned}
+\mathrm E\{Y_{10}\mathbf1(Y_{11}=2)\}
+ &=\mathrm{pr}(Y_{10}=1,Y_{11}=2)
+     +2\mathrm{pr}(Y_{10}=2,Y_{11}=2)\\
+ &=(\xi_{11}-\xi_{10})+2\xi_{10}
+  =\xi_{11}+\xi_{10},\\[3pt]
+\mathrm E\{Y_{01}\mathbf1(Y_{11}=2)\}
+ &=\mathrm{pr}(Y_{01}=1,Y_{11}=2)
+     +2\mathrm{pr}(Y_{01}=2,Y_{11}=2)\\
+ &=(\xi_{11}-\xi_{01})+2\xi_{01}
+  =\xi_{11}+\xi_{01}.
+\end{aligned}
+\label{eq:exposure-moments}
+\end{equation}
+
+背景的三个可能取值将事件 $Y_{11}=2$ 分解为互不相交的三部分：
 \[
-\mathrm{pr}(Y_{00}=1,Y_{11}=2)=\xi_{11}-\xi_{00}-\theta.
+\begin{aligned}
+\xi_{11}
+ &=\mathrm{pr}(Y_{00}=0,Y_{11}=2)
+   +\mathrm{pr}(Y_{00}=1,Y_{11}=2)
+   +\mathrm{pr}(Y_{00}=2,Y_{11}=2)\\
+ &=\theta+\mathrm{pr}(Y_{00}=1,Y_{11}=2)+\xi_{00}.
+\end{aligned}
 \]
-将式~\eqref{eq:truncated} 代入式~\eqref{eq:responsibility} 的加权期望，
-并在 $\xi_{11}>0$ 时除以 $\xi_{11}$，即得式~\eqref{eq:grade2}。
+因此
+\begin{equation}
+\begin{aligned}
+\mathrm E\{Y_{00}\mathbf1(Y_{11}=2)\}
+ &=\mathrm{pr}(Y_{00}=1,Y_{11}=2)
+     +2\mathrm{pr}(Y_{00}=2,Y_{11}=2)\\
+ &=(\xi_{11}-\theta-\xi_{00})+2\xi_{00}
+  =\xi_{11}+\xi_{00}-\theta.
+\end{aligned}
+\label{eq:background-moment}
+\end{equation}
+此外，$\mathrm E\{Y_{11}\mathbf1(Y_{11}=2)\}=2\xi_{11}$。
 
-当 $Y_{11}=0$ 时，假设~\ref{ass:unit} 蕴含 $Y_{00}=Y_{01}=Y_{10}=0$。
-故每个责任函数在 $Y_{11}=1$ 层的未标准化期望，
-等于其无条件期望减去在 $Y_{11}=2$ 层的未标准化期望。
-对式~\eqref{eq:responsibility} 的三个责任函数分别应用该分解，结合式~\eqref{eq:truncated}，
-并除以 $\mathrm{pr}(Y_{11}=1)$，即得式~\eqref{eq:grade1}。
-此推导也适用于 $\xi_{11}=0$。
+对式~\eqref{eq:responsibility} 取带指标的无条件期望，
+由式~\eqref{eq:exposure-moments}--\eqref{eq:background-moment} 得
+\begin{equation}
+\begin{aligned}
+&\mathrm E\!\left[\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+                      \mathbf1(Y_{11}=2)\right]\\
+&\quad=(\xi_{11}+\xi_{10})-(\xi_{11}+\xi_{00}-\theta)
+          +2\xi_{11}-(\xi_{11}+\xi_{01})\\
+&\quad=\xi_{11}-\xi_{01}+\xi_{10}-\xi_{00}+\theta,\\[4pt]
+&\mathrm E\!\left[\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+                      \mathbf1(Y_{11}=2)\right]\\
+&\quad=(\xi_{11}+\xi_{01})-(\xi_{11}+\xi_{00}-\theta)
+          +2\xi_{11}-(\xi_{11}+\xi_{10})\\
+&\quad=\xi_{11}-\xi_{10}+\xi_{01}-\xi_{00}+\theta.
+\end{aligned}
+\label{eq:grade2-numerators}
+\end{equation}
+当 $\xi_{11}>0$ 时，
+\[
+\begin{aligned}
+\mathcal R_1(\mathcal E_2)
+ &=\frac{\mathrm E[\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+                          \mathbf1(Y_{11}=2)]}{2\xi_{11}},\\
+\mathcal R_2(\mathcal E_2)
+ &=\frac{\mathrm E[\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+                          \mathbf1(Y_{11}=2)]}{2\xi_{11}},\\
+\mathcal R_0(\mathcal E_2)
+ &=\frac{\mathrm E\{Y_{00}\mathbf1(Y_{11}=2)\}}{\xi_{11}}.
+\end{aligned}
+\]
+将式~\eqref{eq:grade2-numerators} 与式~\eqref{eq:background-moment} 代入，得到式~\eqref{eq:grade2}。
 
-式~\eqref{eq:theta}--\eqref{eq:grade1} 仅依赖可识别的边际概率及边际均值。
-三个责任函数之和恒为 $Y_{11}$，故两类病例中的平均责任分别合计为 $1$ 和 $2$。
+\clearpage
+假设~\ref{ass:unit} 蕴含 $Y_{11}=0$ 时 $Y_{00}=Y_{01}=Y_{10}=0$。
+因而在此事件上，
+\[
+(Y_{10}-Y_{00})+(Y_{11}-Y_{01})=0,\qquad
+(Y_{01}-Y_{00})+(Y_{11}-Y_{10})=0,\qquad Y_{00}=0.
+\]
+又因 $Y_{11}$ 只取 $0,1,2$，有以下逐个体恒等式：
+\begin{equation}
+\begin{aligned}
+&\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}\mathbf1(Y_{11}=1)\\
+&\quad=\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+       -\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}\mathbf1(Y_{11}=2),\\[4pt]
+&\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}\mathbf1(Y_{11}=1)\\
+&\quad=\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+       -\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}\mathbf1(Y_{11}=2),\\[4pt]
+&Y_{00}\mathbf1(Y_{11}=1)=Y_{00}-Y_{00}\mathbf1(Y_{11}=2).
+\end{aligned}
+\label{eq:grade1-decomposition}
+\end{equation}
+取期望并代入式~\eqref{eq:grade2-numerators} 与式~\eqref{eq:background-moment}，得
+\begin{equation}
+\begin{aligned}
+&\mathrm E\!\left[\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+                       \mathbf1(Y_{11}=1)\right]\\
+&\quad=\mathrm E\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+       -\xi_{11}+\xi_{01}-\xi_{10}+\xi_{00}-\theta,\\[4pt]
+&\mathrm E\!\left[\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+                       \mathbf1(Y_{11}=1)\right]\\
+&\quad=\mathrm E\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
+       -\xi_{11}+\xi_{10}-\xi_{01}+\xi_{00}-\theta,\\[4pt]
+&\mathrm E\{Y_{00}\mathbf1(Y_{11}=1)\}
+   =\mathrm E(Y_{00})-\xi_{11}-\xi_{00}+\theta.
+\end{aligned}
+\label{eq:grade1-numerators}
+\end{equation}
+当 $\mathrm{pr}(Y_{11}=1)>0$ 时，式~\eqref{eq:grade1-numerators} 中前两个期望
+各除以 $2\mathrm{pr}(Y_{11}=1)$，第三个期望除以 $\mathrm{pr}(Y_{11}=1)$，
+分别得到 $\mathcal R_1(\mathcal E_1),\mathcal R_2(\mathcal E_1),\mathcal R_0(\mathcal E_1)$，
+即式~\eqref{eq:grade1}。上述计算未除以 $\xi_{11}$，故也适用于 $\xi_{11}=0$。
+
+式~\eqref{eq:theta} 只依赖四个潜在结果的边际概率。
+式~\eqref{eq:grade1} 中的无条件期望由线性性写为边际均值之和，例如
+\[
+\mathrm E\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
+=\mathrm E(Y_{10})-\mathrm E(Y_{00})+\mathrm E(Y_{11})-\mathrm E(Y_{01}).
+\]
+因此，式~\eqref{eq:theta}--\eqref{eq:grade1} 均为观测分布的函数。
+
+最后，逐个体有
+\[
+\tfrac12\{(Y_{10}-Y_{00})+(Y_{11}-Y_{01})\}
++\tfrac12\{(Y_{01}-Y_{00})+(Y_{11}-Y_{10})\}
++Y_{00}=Y_{11}.
+\]
+分别取给定 $Y_{11}=1$ 和 $Y_{11}=2$ 的条件期望，得到定理中的两条责任加总等式。
 \hfill$\square$
 
 \ifPDFTeX\end{CJK*}\fi
